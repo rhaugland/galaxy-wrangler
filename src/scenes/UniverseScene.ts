@@ -1,7 +1,7 @@
 import { Button } from '@/ui/button';
 import { FONT } from '@/ui/theme';
 import { UNIVERSES } from '@/config/worlds';
-import type { PlanetDef, SaveData } from '@/models/types';
+import type { PlanetDef, TierDef, SaveData } from '@/models/types';
 
 const W = 390;
 const H = 844;
@@ -31,10 +31,13 @@ export class UniverseScene extends Phaser.Scene {
   private velocity = 0;
   private universeIndex = 0;
 
+  // Detail overlay
+  private overlay!: Phaser.GameObjects.Container;
+  private overlayVisible = false;
+
   constructor() { super('Universe'); }
 
   preload() {
-    // Preload all guardian creature images
     const universe = UNIVERSES[this.universeIndex];
     for (const galaxy of universe.galaxies) {
       for (const planet of galaxy.planets) {
@@ -96,12 +99,6 @@ export class UniverseScene extends Phaser.Scene {
       color: '#666677',
     }).setOrigin(0.5).setDepth(10);
 
-    // Header fade edge
-    const headerFade = this.add.graphics();
-    headerFade.fillStyle(0x06060f, 0.6);
-    headerFade.fillRect(0, 120, W, 8);
-    headerFade.setDepth(10);
-
     // ── Fixed footer ──
     const footerBg = this.add.graphics();
     footerBg.fillStyle(0x06060f, 1);
@@ -122,8 +119,8 @@ export class UniverseScene extends Phaser.Scene {
       const prog = save?.worldProgress[planet.id] ?? [];
       const cleared = prog.filter(Boolean).length;
       const primaryHex = `#${colors.primary.toString(16).padStart(6, '0')}`;
+      const accentHex = `#${colors.accent.toString(16).padStart(6, '0')}`;
 
-      // Planet section header
       const sectionContainer = this.add.container(0, yOffset);
       this.scrollContainer.add(sectionContainer);
 
@@ -170,7 +167,7 @@ export class UniverseScene extends Phaser.Scene {
         sectionContainer.add(pdG);
       }
 
-      // Tier rows
+      // Tier rows — tappable museum entries
       const TIER_ROW_H = 72;
       planet.tiers.forEach((tier, ti) => {
         const rowY = 56 + ti * TIER_ROW_H;
@@ -215,34 +212,44 @@ export class UniverseScene extends Phaser.Scene {
           color: isLocked ? '#333344' : (isCleared ? '#44ff44' : '#ffffff'),
         }));
 
-        // HP + credits
-        rowContainer.add(this.add.text(80, 48, `HP ${tier.guardian.hp}  \u2022  ${tier.guardian.coinBonus} CR`, {
+        // Tier name (what they guard)
+        rowContainer.add(this.add.text(80, 48, `Guards: ${tier.name}`, {
           fontSize: '10px', fontFamily: FONT,
-          color: isLocked ? '#222233' : '#555566',
+          color: isLocked ? '#222233' : accentHex,
         }));
 
-        // Status / action button
+        // Status indicator on right
         if (isCleared) {
-          rowContainer.add(this.add.text(W - 36, 18, '\u2713', {
-            fontSize: '20px', fontFamily: FONT, fontStyle: 'bold',
+          rowContainer.add(this.add.text(W - 36, 16, '\u2713', {
+            fontSize: '18px', fontFamily: FONT, fontStyle: 'bold',
             color: '#44ff44',
           }).setOrigin(0.5));
-
-          const replayBtn = new Button(this, W - 52, 48, 'REPLAY', () => {
-            this.launchTier(planet, ti);
-          }, 72, 26);
-          rowContainer.add(replayBtn);
         } else if (isLocked) {
-          rowContainer.add(this.add.text(W - 52, TIER_ROW_H / 2, '\uD83D\uDD12', {
-            fontSize: '16px', fontFamily: FONT,
+          rowContainer.add(this.add.text(W - 36, 16, '\uD83D\uDD12', {
+            fontSize: '14px', fontFamily: FONT,
             color: '#333344',
           }).setOrigin(0.5));
-        } else {
-          const fightBtn = new Button(this, W - 52, TIER_ROW_H / 2, 'FIGHT', () => {
-            this.launchTier(planet, ti);
-          }, 80, 32);
-          rowContainer.add(fightBtn);
         }
+
+        // "View" chevron
+        if (!isLocked) {
+          rowContainer.add(this.add.text(W - 36, 46, '\u203A', {
+            fontSize: '22px', fontFamily: FONT,
+            color: '#555566',
+          }).setOrigin(0.5));
+        }
+
+        // Make the row tappable — open detail overlay
+        const hitZone = this.add.zone(W / 2, TIER_ROW_H / 2, W - 32, TIER_ROW_H).setInteractive();
+        rowContainer.add(hitZone);
+
+        let pDownX = 0, pDownY = 0;
+        hitZone.on('pointerdown', (p: Phaser.Input.Pointer) => { pDownX = p.x; pDownY = p.y; });
+        hitZone.on('pointerup', (p: Phaser.Input.Pointer) => {
+          if (Math.abs(p.y - pDownY) > 20) return; // was scrolling
+          if (Math.abs(p.x - pDownX) > 20) return;
+          this.showDetail(planet, tier, ti, isCleared, isLocked, colors);
+        });
 
         // Lock overlay
         if (isLocked) {
@@ -254,7 +261,7 @@ export class UniverseScene extends Phaser.Scene {
         }
       });
 
-      const sectionHeight = 56 + 3 * TIER_ROW_H + 20; // header + 3 rows + gap
+      const sectionHeight = 56 + 3 * TIER_ROW_H + 20;
       yOffset += sectionHeight;
     });
 
@@ -268,6 +275,7 @@ export class UniverseScene extends Phaser.Scene {
 
     // Scroll input
     this.input.on('pointerdown', (p: Phaser.Input.Pointer) => {
+      if (this.overlayVisible) return;
       if (p.y < 120 || p.y > H - 60) return;
       this.isDragging = true;
       this.dragStartY = p.y;
@@ -285,6 +293,9 @@ export class UniverseScene extends Phaser.Scene {
       }
       this.isDragging = false;
     });
+
+    // Prepare overlay container (hidden)
+    this.overlay = this.add.container(0, 0).setDepth(20).setVisible(false);
   }
 
   update(_t: number, delta: number) {
@@ -297,10 +308,160 @@ export class UniverseScene extends Phaser.Scene {
     this.scrollContainer.y = -this.scrollY;
   }
 
-  private launchTier(planet: PlanetDef, tierIndex: number) {
-    this.cameras.main.fadeOut(300, 0, 0, 0);
-    this.cameras.main.once('camerafadeoutcomplete', () => {
-      this.scene.start('Travel', { worldId: planet.id, levelIndex: tierIndex });
-    });
+  private showDetail(
+    planet: PlanetDef,
+    tier: TierDef,
+    _tierIndex: number,
+    isCleared: boolean,
+    isLocked: boolean,
+    colors: { primary: number; accent: number },
+  ) {
+    this.overlay.removeAll(true);
+    this.overlayVisible = true;
+    this.overlay.setVisible(true);
+
+    const cx = W / 2;
+    const primaryHex = `#${colors.primary.toString(16).padStart(6, '0')}`;
+    const accentHex = `#${colors.accent.toString(16).padStart(6, '0')}`;
+
+    // Dimmed backdrop
+    const backdrop = this.add.graphics();
+    backdrop.fillStyle(0x000000, 0.85);
+    backdrop.fillRect(0, 0, W, H);
+    this.overlay.add(backdrop);
+
+    // Make backdrop dismiss the overlay
+    const backdropZone = this.add.zone(W / 2, H / 2, W, H).setInteractive();
+    this.overlay.add(backdropZone);
+    backdropZone.on('pointerup', () => this.hideDetail());
+
+    // Card
+    const cardX = 20;
+    const cardY = 60;
+    const cardW = W - 40;
+    const cardH = H - 120;
+    const cardContainer = this.add.container(0, 0);
+    this.overlay.add(cardContainer);
+
+    // Card background
+    const cardBg = this.add.graphics();
+    cardBg.fillStyle(0x0a0a1e, 0.98);
+    cardBg.fillRoundedRect(cardX, cardY, cardW, cardH, 16);
+    cardBg.lineStyle(1.5, colors.primary, 0.4);
+    cardBg.strokeRoundedRect(cardX, cardY, cardW, cardH, 16);
+    cardContainer.add(cardBg);
+
+    // Stop clicks on card from dismissing
+    const cardZone = this.add.zone(cx, H / 2, cardW, cardH).setInteractive();
+    cardContainer.add(cardZone);
+
+    // Close button
+    const closeBtn = new Button(this, W - 48, cardY + 28, '\u2715', () => this.hideDetail(), 36, 36);
+    cardContainer.add(closeBtn);
+
+    // ── Header section ──
+    // Tier label
+    const tierLabel = TIER_LABELS[tier.tier] ?? tier.tier;
+    cardContainer.add(this.add.text(cx - 10, cardY + 20, tierLabel, {
+      fontSize: '11px', fontFamily: FONT,
+      color: '#888899',
+    }).setOrigin(0.5));
+
+    // Tier name (what is being guarded)
+    cardContainer.add(this.add.text(cx - 10, cardY + 42, tier.name.toUpperCase(), {
+      fontSize: '18px', fontFamily: FONT, fontStyle: 'bold',
+      color: primaryHex,
+    }).setOrigin(0.5));
+
+    // Planet context
+    cardContainer.add(this.add.text(cx, cardY + 66, planet.name, {
+      fontSize: '11px', fontFamily: FONT,
+      color: '#555566',
+    }).setOrigin(0.5));
+
+    // Divider
+    const div1 = this.add.graphics();
+    div1.lineStyle(1, colors.primary, 0.2);
+    div1.lineBetween(cardX + 20, cardY + 84, cardX + cardW - 20, cardY + 84);
+    cardContainer.add(div1);
+
+    // ── Tier lore ──
+    cardContainer.add(this.add.text(cx, cardY + 96, tier.lore, {
+      fontSize: '12px', fontFamily: FONT,
+      color: '#aaaabb', lineSpacing: 4,
+      wordWrap: { width: cardW - 50 }, align: 'center',
+    }).setOrigin(0.5, 0));
+
+    // ── Guardian section ──
+    const guardianY = cardY + 200;
+
+    const div2 = this.add.graphics();
+    div2.lineStyle(1, colors.primary, 0.15);
+    div2.lineBetween(cardX + 20, guardianY - 10, cardX + cardW - 20, guardianY - 10);
+    cardContainer.add(div2);
+
+    cardContainer.add(this.add.text(cx, guardianY + 4, 'GUARDIAN', {
+      fontSize: '10px', fontFamily: FONT,
+      color: '#555566', letterSpacing: 3,
+    }).setOrigin(0.5));
+
+    cardContainer.add(this.add.text(cx, guardianY + 24, tier.guardian.name.toUpperCase(), {
+      fontSize: '20px', fontFamily: FONT, fontStyle: 'bold',
+      color: accentHex,
+    }).setOrigin(0.5));
+
+    // Creature image
+    const creatureId = tier.creatureReward.id;
+    const textureKey = `creature_${creatureId}`;
+    if (this.textures.exists(textureKey)) {
+      const img = this.add.image(cx, guardianY + 120, textureKey).setDisplaySize(160, 160);
+      if (isLocked) img.setAlpha(0.2);
+      cardContainer.add(img);
+    }
+
+    // Guardian lore
+    cardContainer.add(this.add.text(cx, guardianY + 216, tier.guardian.lore, {
+      fontSize: '11px', fontFamily: FONT,
+      color: '#999aaa', lineSpacing: 3,
+      wordWrap: { width: cardW - 50 }, align: 'center',
+    }).setOrigin(0.5, 0));
+
+    // ── Footer section ──
+    const footerY = cardY + cardH - 60;
+
+    const div3 = this.add.graphics();
+    div3.lineStyle(1, colors.primary, 0.15);
+    div3.lineBetween(cardX + 20, footerY - 16, cardX + cardW - 20, footerY - 16);
+    cardContainer.add(div3);
+
+    // Stats row
+    cardContainer.add(this.add.text(cx, footerY, `HP ${tier.guardian.hp}  \u2022  ${tier.guardian.coinBonus} CREDITS`, {
+      fontSize: '11px', fontFamily: FONT,
+      color: '#666677',
+    }).setOrigin(0.5));
+
+    // Status
+    if (isCleared) {
+      cardContainer.add(this.add.text(cx, footerY + 24, '\u2713 CLAIMED', {
+        fontSize: '14px', fontFamily: FONT, fontStyle: 'bold',
+        color: '#44ff44',
+      }).setOrigin(0.5));
+    } else if (isLocked) {
+      cardContainer.add(this.add.text(cx, footerY + 24, 'CLEAR PREVIOUS TIER FIRST', {
+        fontSize: '11px', fontFamily: FONT,
+        color: '#444455',
+      }).setOrigin(0.5));
+    } else {
+      cardContainer.add(this.add.text(cx, footerY + 24, 'AVAILABLE TO CHALLENGE', {
+        fontSize: '11px', fontFamily: FONT, fontStyle: 'bold',
+        color: primaryHex,
+      }).setOrigin(0.5));
+    }
+  }
+
+  private hideDetail() {
+    this.overlay.setVisible(false);
+    this.overlay.removeAll(true);
+    this.overlayVisible = false;
   }
 }
