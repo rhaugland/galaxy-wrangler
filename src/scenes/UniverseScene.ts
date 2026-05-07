@@ -69,50 +69,46 @@ export class UniverseScene extends Phaser.Scene {
     }
 
     // ── Fixed header ──
+    const HEADER_H = 80;
     const headerBg = this.add.graphics();
     headerBg.fillStyle(0x06060f, 1);
-    headerBg.fillRect(0, 0, W, 120);
-    headerBg.setDepth(10);
+    headerBg.fillRect(0, 0, W, HEADER_H + 4);
+    headerBg.setDepth(15);
 
-    // Universe dropdown button
+    // Universe dropdown pill
     const dropdownBg = this.add.graphics();
     dropdownBg.fillStyle(0x111122, 0.95);
-    dropdownBg.fillRoundedRect(24, 14, W - 48, 40, 8);
+    dropdownBg.fillRoundedRect(80, 12, W - 160, 32, 16);
     dropdownBg.lineStyle(1, 0xff69b4, 0.3);
-    dropdownBg.strokeRoundedRect(24, 14, W - 48, 40, 8);
-    dropdownBg.setDepth(10);
+    dropdownBg.strokeRoundedRect(80, 12, W - 160, 32, 16);
+    dropdownBg.setDepth(15);
 
-    this.add.text(cx, 34, `${universe.name.toUpperCase()}  \u25BE`, {
-      fontSize: '13px', fontFamily: FONT, fontStyle: 'bold',
+    this.add.text(cx, 28, `${universe.name.toUpperCase()}  \u25BE`, {
+      fontSize: '11px', fontFamily: FONT, fontStyle: 'bold',
       color: '#ff69b4',
-    }).setOrigin(0.5).setDepth(10);
+    }).setOrigin(0.5).setDepth(15);
 
     // Galaxy name
-    this.add.text(cx, 72, galaxy.name.toUpperCase(), {
-      fontSize: '22px', fontFamily: FONT, fontStyle: 'bold',
+    this.add.text(cx, 58, galaxy.name.toUpperCase(), {
+      fontSize: '20px', fontFamily: FONT, fontStyle: 'bold',
       color: '#ffffff',
-    }).setOrigin(0.5).setDepth(10);
-
-    // Galaxy description
-    this.add.text(cx, 98, galaxy.description.slice(0, 80) + '...', {
-      fontSize: '10px', fontFamily: FONT,
-      color: '#666677',
-    }).setOrigin(0.5).setDepth(10);
+    }).setOrigin(0.5).setDepth(15);
 
     // ── Fixed footer ──
+    const FOOTER_H = 64;
     const footerBg = this.add.graphics();
     footerBg.fillStyle(0x06060f, 1);
-    footerBg.fillRect(0, H - 60, W, 60);
-    footerBg.setDepth(10);
+    footerBg.fillRect(0, H - FOOTER_H, W, FOOTER_H + 10);
+    footerBg.setDepth(15);
 
-    new Button(this, cx, H - 34, 'BACK', () => {
+    new Button(this, cx, H - 36, 'BACK', () => {
       this.cameras.main.fadeOut(300, 0, 0, 0);
       this.cameras.main.once('camerafadeoutcomplete', () => this.scene.start('MainMenu'));
-    }, 140, 40).setDepth(10);
+    }, 140, 40).setDepth(15);
 
     // ── Scrollable content ──
     this.scrollContainer = this.add.container(0, 0);
-    let yOffset = 136;
+    let yOffset = HEADER_H + 10;
 
     galaxy.planets.forEach((planet) => {
       const colors = PLANET_COLORS[planet.theme] ?? { primary: 0x666666, accent: 0x999999 };
@@ -265,18 +261,18 @@ export class UniverseScene extends Phaser.Scene {
       yOffset += sectionHeight;
     });
 
-    this.maxScroll = Math.max(0, yOffset - (H - 80));
+    this.maxScroll = Math.max(0, yOffset - (H - HEADER_H - FOOTER_H));
 
-    // Scroll mask
+    // Scroll mask — clip content between header and footer
     const maskShape = this.make.graphics({ add: false });
     maskShape.fillStyle(0xffffff);
-    maskShape.fillRect(0, 120, W, H - 180);
+    maskShape.fillRect(0, HEADER_H, W, H - HEADER_H - FOOTER_H);
     this.scrollContainer.setMask(maskShape.createGeometryMask());
 
     // Scroll input
     this.input.on('pointerdown', (p: Phaser.Input.Pointer) => {
       if (this.overlayVisible) return;
-      if (p.y < 120 || p.y > H - 60) return;
+      if (p.y < HEADER_H || p.y > H - FOOTER_H) return;
       this.isDragging = true;
       this.dragStartY = p.y;
       this.dragStartScroll = this.scrollY;
@@ -414,13 +410,13 @@ export class UniverseScene extends Phaser.Scene {
     const creatureId = tier.creatureReward.id;
     const textureKey = `creature_${creatureId}`;
     if (this.textures.exists(textureKey)) {
-      const img = this.add.image(cx, guardianY + 120, textureKey).setDisplaySize(160, 160);
+      const img = this.add.image(cx, guardianY + 130, textureKey).setDisplaySize(200, 200);
       if (isLocked) img.setAlpha(0.2);
       cardContainer.add(img);
     }
 
     // Guardian lore
-    cardContainer.add(this.add.text(cx, guardianY + 216, tier.guardian.lore, {
+    cardContainer.add(this.add.text(cx, guardianY + 246, tier.guardian.lore, {
       fontSize: '11px', fontFamily: FONT,
       color: '#999aaa', lineSpacing: 3,
       wordWrap: { width: cardW - 50 }, align: 'center',
