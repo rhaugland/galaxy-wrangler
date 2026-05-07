@@ -57,24 +57,59 @@ export class PlayerShip extends Phaser.GameObjects.GameObject {
   }
 
   private drawShip() {
-    this.graphics.clear();
+    const g = this.graphics;
+    g.clear();
 
-    // Main hull — triangle/arrow vector shape
-    this.graphics.fillStyle(0x00ccff, 1);
-    this.graphics.fillTriangle(0, -20, -14, 14, 14, 14);
+    // Engine exhaust glow
+    g.fillStyle(0xff1493, 0.1);
+    g.fillCircle(0, 22, 10);
 
-    // Center accent
-    this.graphics.fillStyle(0xffffff, 0.9);
-    this.graphics.fillTriangle(0, -14, -6, 8, 6, 8);
+    // Main hull
+    g.fillStyle(0x1a1a2e, 1);
+    g.fillTriangle(0, -22, -16, 16, 16, 16);
 
-    // Engine glow
-    this.graphics.fillStyle(0xff6600, 0.8);
-    this.graphics.fillRect(-8, 10, 6, 8);
-    this.graphics.fillRect(2, 10, 6, 8);
+    // Hull panels
+    g.fillStyle(0x2a2a4e, 1);
+    g.fillTriangle(0, -20, -12, 14, 0, 14);
+    g.fillStyle(0x3a3a6e, 1);
+    g.fillTriangle(0, -20, 0, 14, 12, 14);
 
-    // Wing details
-    this.graphics.lineStyle(1, 0x0088cc, 1);
-    this.graphics.strokeTriangle(0, -20, -14, 14, 14, 14);
+    // Wings
+    g.fillStyle(0x4400aa, 1);
+    g.fillTriangle(-16, 12, -28, 20, -10, 6);
+    g.fillTriangle(16, 12, 28, 20, 10, 6);
+
+    // Wing tip glow
+    g.fillStyle(0xff1493, 0.8);
+    g.fillCircle(-27, 19, 1.5);
+    g.fillCircle(27, 19, 1.5);
+    g.fillStyle(0xff1493, 0.25);
+    g.fillCircle(-27, 19, 4);
+    g.fillCircle(27, 19, 4);
+
+    // Cockpit
+    g.fillStyle(0x00ffff, 0.6);
+    g.fillTriangle(0, -16, -4, 0, 4, 0);
+    g.fillStyle(0x88ffff, 0.3);
+    g.fillTriangle(0, -12, -2, -2, 2, -2);
+
+    // Center line
+    g.lineStyle(1, 0x00ffff, 0.15);
+    g.lineBetween(0, -18, 0, 12);
+
+    // Engine nozzles
+    g.fillStyle(0x111111, 1);
+    g.fillRect(-6, 14, 4, 4);
+    g.fillRect(2, 14, 4, 4);
+
+    // Flames
+    g.fillStyle(0xff6600, 0.8);
+    g.fillRect(-5, 18, 3, 5);
+    g.fillRect(2, 18, 3, 5);
+
+    // Hull edge
+    g.lineStyle(1, 0xff69b4, 0.2);
+    g.strokeTriangle(0, -22, -16, 16, 16, 16);
   }
 
   setHorizontalMode(horizontal: boolean) {
