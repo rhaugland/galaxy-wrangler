@@ -1,4 +1,5 @@
 import { Button } from './button';
+import { FONT } from './theme';
 
 const GAME_WIDTH = 390;
 const GAME_HEIGHT = 844;
@@ -38,7 +39,7 @@ export class Dialog extends Phaser.GameObjects.Container {
       {
         fontSize: '22px',
         color: '#ffffff',
-        fontFamily: 'Arial, sans-serif',
+        fontFamily: FONT,
         fontStyle: 'bold',
         align: 'center',
         wordWrap: { width: panelWidth - 32 },

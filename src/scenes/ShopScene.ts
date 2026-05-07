@@ -3,6 +3,7 @@ import { SHOP_ITEMS } from '@/config/items';
 import { SaveData, ShopItem } from '@/models/types';
 import { SaveManager } from '@/systems/save-system';
 import { purchaseItem, equipWeapon, equipDefense, equipCosmetic } from '@/models/inventory';
+import { FONT } from '@/ui/theme';
 
 type TabKey = 'weapon' | 'defense' | 'stat_boost' | 'cosmetic';
 const TABS: Array<{ label: string; key: TabKey }> = [
@@ -33,7 +34,7 @@ export class ShopScene extends Phaser.Scene {
     // Title
     this.add.text(cx, 44, 'Shop', {
       fontSize: '30px',
-      fontFamily: 'Arial, sans-serif',
+      fontFamily: FONT,
       color: '#ffffff',
       stroke: '#4444cc',
       strokeThickness: 3,
@@ -42,7 +43,7 @@ export class ShopScene extends Phaser.Scene {
     // Coin counter
     this.coinText = this.add.text(W - 16, 44, `\u25cf ${this.save.coins}`, {
       fontSize: '18px',
-      fontFamily: 'Arial, sans-serif',
+      fontFamily: FONT,
       color: '#ffdd44',
     }).setOrigin(1, 0.5);
 
@@ -100,19 +101,19 @@ export class ShopScene extends Phaser.Scene {
     this.itemsContainer.add(bg);
 
     const nameT = this.add.text(cx - 148, cardY - 38, item.name, {
-      fontSize: '17px', fontFamily: 'Arial, sans-serif', color: '#ffffff',
+      fontSize: '17px', fontFamily: FONT, color: '#ffffff',
     });
     this.itemsContainer.add(nameT);
 
     const descT = this.add.text(cx - 148, cardY - 14, item.description, {
-      fontSize: '12px', fontFamily: 'Arial, sans-serif', color: '#aaaaaa',
+      fontSize: '12px', fontFamily: FONT, color: '#aaaaaa',
       wordWrap: { width: 200 },
     });
     this.itemsContainer.add(descT);
 
     if (!owned) {
       const costT = this.add.text(cx + 80, cardY - 14, `${item.cost} coins`, {
-        fontSize: '13px', fontFamily: 'Arial, sans-serif',
+        fontSize: '13px', fontFamily: FONT,
         color: canAfford ? '#ffdd44' : '#aa5500',
       }).setOrigin(0, 0);
       this.itemsContainer.add(costT);

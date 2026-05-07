@@ -8,6 +8,7 @@ import { getEffectiveStats } from '@/models/player';
 import { Dialog } from '@/ui/dialog';
 import { Projectile } from '@/entities/projectile';
 import { awardCoins } from '@/systems/economy';
+import { FONT } from '@/ui/theme';
 
 const CANVAS_W = 390;
 const CANVAS_H = 844;
@@ -301,14 +302,14 @@ export class BossScene extends Phaser.Scene {
     this.playerHpText = this.add.text(12, barY - 13, 'HP', {
       fontSize: '10px',
       color: '#aaffaa',
-      fontFamily: 'Arial, sans-serif',
+      fontFamily: FONT,
     }).setDepth(hudDepth);
 
     // Boss name (top center)
     this.bossNameText = this.add.text(CANVAS_W / 2, barY - 13, bossName, {
       fontSize: '11px',
       color: '#ffaaaa',
-      fontFamily: 'Arial, sans-serif',
+      fontFamily: FONT,
       align: 'center',
     }).setOrigin(0.5, 0).setDepth(hudDepth);
 
@@ -329,7 +330,7 @@ export class BossScene extends Phaser.Scene {
     this.add.text(CANVAS_W / 2, CANVAS_H - 22, styleLabels[bossStyle] ?? '', {
       fontSize: '12px',
       color: '#88aacc',
-      fontFamily: 'Arial, sans-serif',
+      fontFamily: FONT,
       align: 'center',
     }).setOrigin(0.5, 1).setDepth(hudDepth);
   }

@@ -1,6 +1,7 @@
 import { Button } from '@/ui/button';
 import { UNIVERSES } from '@/config/worlds';
 import type { GalaxyDef, PlanetDef, SaveData } from '@/models/types';
+import { FONT } from '@/ui/theme';
 
 const W = 390;
 const H = 844;
@@ -50,7 +51,7 @@ export class GalaxyViewScene extends Phaser.Scene {
     titleBg.setDepth(10);
 
     this.add.text(cx, 36, galaxy.name.toUpperCase(), {
-      fontSize: '24px', fontFamily: '"Courier New", monospace', fontStyle: 'bold',
+      fontSize: '24px', fontFamily: FONT, fontStyle: 'bold',
       color: '#ff69b4', stroke: '#330022', strokeThickness: 2,
     }).setOrigin(0.5).setDepth(10);
 
@@ -99,19 +100,19 @@ export class GalaxyViewScene extends Phaser.Scene {
 
       // Planet name
       cardContainer.add(this.add.text(110, 14, planet.name.toUpperCase(), {
-        fontSize: '16px', fontFamily: '"Courier New", monospace', fontStyle: 'bold',
+        fontSize: '16px', fontFamily: FONT, fontStyle: 'bold',
         color: `#${colors.primary.toString(16).padStart(6, '0')}`,
       }));
 
       // Description
       cardContainer.add(this.add.text(110, 38, planet.description, {
-        fontSize: '9px', fontFamily: '"Courier New", monospace',
+        fontSize: '9px', fontFamily: FONT,
         color: '#777788', wordWrap: { width: W - 140 },
       }));
 
       // Progress
       cardContainer.add(this.add.text(110, 80, `${cleared}/3 CLAIMED`, {
-        fontSize: '11px', fontFamily: '"Courier New", monospace', fontStyle: 'bold',
+        fontSize: '11px', fontFamily: FONT, fontStyle: 'bold',
         color: cleared === 3 ? '#44ff44' : '#888899',
       }));
 

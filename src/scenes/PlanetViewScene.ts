@@ -1,6 +1,7 @@
 import { Button } from '@/ui/button';
 import { UNIVERSES } from '@/config/worlds';
 import type { PlanetDef, TierDef, SaveData } from '@/models/types';
+import { FONT } from '@/ui/theme';
 
 const W = 390;
 const H = 844;
@@ -80,12 +81,12 @@ export class PlanetViewScene extends Phaser.Scene {
     titleBg.setDepth(10);
 
     this.add.text(cx, 30, planet.name.toUpperCase(), {
-      fontSize: '22px', fontFamily: '"Courier New", monospace', fontStyle: 'bold',
+      fontSize: '22px', fontFamily: FONT, fontStyle: 'bold',
       color: primaryHex, stroke: '#000000', strokeThickness: 2,
     }).setOrigin(0.5).setDepth(10);
 
     this.add.text(cx, 58, planet.description, {
-      fontSize: '9px', fontFamily: '"Courier New", monospace',
+      fontSize: '9px', fontFamily: FONT,
       color: '#777788', wordWrap: { width: W - 40 }, align: 'center',
     }).setOrigin(0.5, 0).setDepth(10);
 
@@ -126,19 +127,19 @@ export class PlanetViewScene extends Phaser.Scene {
       // Tier icon + name
       const tierIcon = TIER_ICONS[tier.tier] ?? '';
       card.add(this.add.text(cx, 20, `${tierIcon} ${tier.name.toUpperCase()}`, {
-        fontSize: '16px', fontFamily: '"Courier New", monospace', fontStyle: 'bold',
+        fontSize: '16px', fontFamily: FONT, fontStyle: 'bold',
         color: isLocked ? '#444444' : primaryHex,
       }).setOrigin(0.5));
 
       // Tier label
       card.add(this.add.text(cx, 42, tier.tier.toUpperCase(), {
-        fontSize: '10px', fontFamily: '"Courier New", monospace',
+        fontSize: '10px', fontFamily: FONT,
         color: isLocked ? '#333333' : '#666688',
       }).setOrigin(0.5));
 
       // Tier lore
       card.add(this.add.text(cx, 60, tier.lore, {
-        fontSize: '10px', fontFamily: '"Courier New", monospace',
+        fontSize: '10px', fontFamily: FONT,
         color: isLocked ? '#333344' : '#888899',
         wordWrap: { width: W - 80 }, align: 'center',
       }).setOrigin(0.5, 0));
@@ -151,12 +152,12 @@ export class PlanetViewScene extends Phaser.Scene {
 
       // Guardian section
       card.add(this.add.text(cx, 142, 'GUARDIAN', {
-        fontSize: '10px', fontFamily: '"Courier New", monospace',
+        fontSize: '10px', fontFamily: FONT,
         color: isLocked ? '#333333' : '#666666',
       }).setOrigin(0.5));
 
       card.add(this.add.text(cx, 158, tier.guardian.name.toUpperCase(), {
-        fontSize: '18px', fontFamily: '"Courier New", monospace', fontStyle: 'bold',
+        fontSize: '18px', fontFamily: FONT, fontStyle: 'bold',
         color: isLocked ? '#444444' : accentHex,
       }).setOrigin(0.5));
 
@@ -172,7 +173,7 @@ export class PlanetViewScene extends Phaser.Scene {
 
       // Guardian lore
       card.add(this.add.text(cx, 348, tier.guardian.lore, {
-        fontSize: '9px', fontFamily: '"Courier New", monospace',
+        fontSize: '9px', fontFamily: FONT,
         color: isLocked ? '#222233' : '#777788',
         wordWrap: { width: W - 80 }, align: 'center',
       }).setOrigin(0.5, 0));
@@ -180,7 +181,7 @@ export class PlanetViewScene extends Phaser.Scene {
       // Status / action
       if (isCleared) {
         card.add(this.add.text(cx, 440, '\u2713 CLAIMED', {
-          fontSize: '14px', fontFamily: '"Courier New", monospace', fontStyle: 'bold',
+          fontSize: '14px', fontFamily: FONT, fontStyle: 'bold',
           color: '#44ff44',
         }).setOrigin(0.5));
 
@@ -191,13 +192,13 @@ export class PlanetViewScene extends Phaser.Scene {
         card.add(replayBtn);
       } else if (isLocked) {
         card.add(this.add.text(cx, 460, 'CLEAR PREVIOUS TIER FIRST', {
-          fontSize: '10px', fontFamily: '"Courier New", monospace',
+          fontSize: '10px', fontFamily: FONT,
           color: '#444444',
         }).setOrigin(0.5));
       } else {
         // HP indicator
         card.add(this.add.text(cx, 432, `HP: ${tier.guardian.hp}  |  ${tier.guardian.coinBonus} CREDITS`, {
-          fontSize: '10px', fontFamily: '"Courier New", monospace',
+          fontSize: '10px', fontFamily: FONT,
           color: '#888899',
         }).setOrigin(0.5));
 

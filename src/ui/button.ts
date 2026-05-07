@@ -1,3 +1,5 @@
+import { FONT } from './theme';
+
 export class Button extends Phaser.GameObjects.Container {
   private bg: Phaser.GameObjects.Graphics;
   private label: Phaser.GameObjects.Text;
@@ -27,11 +29,11 @@ export class Button extends Phaser.GameObjects.Container {
     this.drawBg(0x0a0a0a, 0xff1493, 0.8);
 
     this.label = scene.add.text(0, 0, labelText, {
-      fontSize: '18px',
+      fontSize: '16px',
       color: '#ffffff',
-      fontFamily: '"Courier New", monospace',
+      fontFamily: FONT,
       fontStyle: 'bold',
-      letterSpacing: 4,
+      letterSpacing: 2,
     }).setOrigin(0.5, 0.5);
 
     this.add([this.glowGraphics, this.bg, this.label]);

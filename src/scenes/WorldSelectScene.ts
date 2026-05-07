@@ -1,6 +1,7 @@
 import { Button } from '@/ui/button';
 import { WORLDS } from '@/config/worlds';
 import { SaveData } from '@/models/types';
+import { FONT } from '@/ui/theme';
 
 const THEME_COLORS: Record<string, number> = {
   nebula: 0x9944cc,
@@ -31,7 +32,7 @@ export class WorldSelectScene extends Phaser.Scene {
 
     this.add.text(cx, 50, 'Select World', {
       fontSize: '30px',
-      fontFamily: 'Arial, sans-serif',
+      fontFamily: FONT,
       color: '#ffffff',
       stroke: '#4444cc',
       strokeThickness: 3,
@@ -66,14 +67,14 @@ export class WorldSelectScene extends Phaser.Scene {
       // World name
       this.add.text(cx, cardY - 42, world.name, {
         fontSize: '22px',
-        fontFamily: 'Arial, sans-serif',
+        fontFamily: FONT,
         color: unlocked ? '#' + themeColor.toString(16).padStart(6, '0') : '#666666',
       }).setOrigin(0.5);
 
       // Progress indicator
       this.add.text(cx, cardY - 14, `${cleared}/${world.levels.length} levels cleared`, {
         fontSize: '14px',
-        fontFamily: 'Arial, sans-serif',
+        fontFamily: FONT,
         color: '#aaaaaa',
       }).setOrigin(0.5);
 
@@ -81,7 +82,7 @@ export class WorldSelectScene extends Phaser.Scene {
         // Lock overlay
         this.add.text(cx, cardY + 30, '\uD83D\uDD12 Locked', {
           fontSize: '20px',
-          fontFamily: 'Arial, sans-serif',
+          fontFamily: FONT,
           color: '#666666',
         }).setOrigin(0.5);
       } else {

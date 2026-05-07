@@ -1,5 +1,6 @@
 import { InputSystem } from '@/systems/input-system';
 import { Button } from '@/ui/button';
+import { FONT } from '@/ui/theme';
 
 export class BootScene extends Phaser.Scene {
   constructor() { super('Boot'); }
@@ -25,7 +26,7 @@ export class BootScene extends Phaser.Scene {
 
     this.add.text(cx, H / 2 - 80, 'Hold your phone how you\'ll play', {
       fontSize: '22px',
-      fontFamily: 'Arial, sans-serif',
+      fontFamily: FONT,
       color: '#ffffff',
       align: 'center',
       wordWrap: { width: 300 },

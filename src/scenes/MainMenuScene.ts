@@ -1,6 +1,7 @@
 import { Button } from '@/ui/button';
 import { SaveManager, IDBBackend } from '@/systems/save-system';
 import { SaveData } from '@/models/types';
+import { FONT } from '@/ui/theme';
 
 const DEFAULT_SAVE: SaveData = {
   xp: 0, level: 1, coins: 0,
@@ -70,14 +71,14 @@ export class MainMenuScene extends Phaser.Scene {
     // Shadow/glow layer
     this.add.text(cx, 105, 'GALAXY', {
       fontSize: '52px',
-      fontFamily: '"Courier New", monospace',
+      fontFamily: FONT,
       fontStyle: 'bold',
       color: '#ff1493',
     }).setOrigin(0.5).setAlpha(0.3).setScale(1.02);
 
     this.add.text(cx, 105, 'GALAXY', {
       fontSize: '52px',
-      fontFamily: '"Courier New", monospace',
+      fontFamily: FONT,
       fontStyle: 'bold',
       color: '#ff69b4',
       stroke: '#ff1493',
@@ -86,7 +87,7 @@ export class MainMenuScene extends Phaser.Scene {
 
     this.titleText = this.add.text(cx, 165, 'WRANGLER', {
       fontSize: '36px',
-      fontFamily: '"Courier New", monospace',
+      fontFamily: FONT,
       fontStyle: 'bold',
       color: '#00ffff',
       stroke: '#004444',
@@ -96,7 +97,7 @@ export class MainMenuScene extends Phaser.Scene {
     // Subtitle line
     this.add.text(cx, 200, '_ _ _ _ _ _ _ _ _ _ _ _ _ _', {
       fontSize: '12px',
-      fontFamily: 'monospace',
+      fontFamily: FONT,
       color: '#ff69b4',
     }).setOrigin(0.5).setAlpha(0.5);
 
@@ -127,14 +128,14 @@ export class MainMenuScene extends Phaser.Scene {
     // Player info at bottom — retro styled
     this.add.text(cx, H - 60, `\u2605 LEVEL ${save.level} \u2605`, {
       fontSize: '16px',
-      fontFamily: '"Courier New", monospace',
+      fontFamily: FONT,
       fontStyle: 'bold',
       color: '#ff69b4',
     }).setOrigin(0.5);
 
     this.add.text(cx, H - 38, `${save.coins} CREDITS`, {
       fontSize: '20px',
-      fontFamily: '"Courier New", monospace',
+      fontFamily: FONT,
       fontStyle: 'bold',
       color: '#00ffff',
     }).setOrigin(0.5);
@@ -142,7 +143,7 @@ export class MainMenuScene extends Phaser.Scene {
     // Version tag
     this.add.text(cx, H - 16, 'v1.1', {
       fontSize: '10px',
-      fontFamily: 'monospace',
+      fontFamily: FONT,
       color: '#333366',
     }).setOrigin(0.5);
   }

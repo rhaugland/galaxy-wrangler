@@ -2,6 +2,7 @@ import { Button } from '@/ui/button';
 import { CAPTAINS } from '@/config/worlds';
 import { SaveData, Captain } from '@/models/types';
 import { SaveManager } from '@/systems/save-system';
+import { FONT } from '@/ui/theme';
 
 const W = 390;
 const CARD_W = 340;
@@ -68,7 +69,7 @@ export class CaptainSelectScene extends Phaser.Scene {
     titleBg.setDepth(10);
 
     this.add.text(W / 2, 36, 'FLEET', {
-      fontSize: '28px', fontFamily: '"Courier New", monospace', fontStyle: 'bold',
+      fontSize: '28px', fontFamily: FONT, fontStyle: 'bold',
       color: '#ff69b4', stroke: '#330022', strokeThickness: 2,
     }).setOrigin(0.5).setDepth(10);
 
@@ -174,7 +175,7 @@ export class CaptainSelectScene extends Phaser.Scene {
       // === FRONT SIDE ===
       // Captain name at top
       card.add(this.add.text(0, 16, captain.name.toUpperCase(), {
-        fontSize: '18px', fontFamily: '"Courier New", monospace', fontStyle: 'bold',
+        fontSize: '18px', fontFamily: FONT, fontStyle: 'bold',
         color: isUnlocked ? `#${theme.primary.toString(16).padStart(6, '0')}` : '#444444',
       }).setOrigin(0.5));
 
@@ -194,14 +195,14 @@ export class CaptainSelectScene extends Phaser.Scene {
 
       // Swipe label
       card.add(this.add.text(0, 388, state.side === 'creature' ? 'CREATURE' : 'SHIP', {
-        fontSize: '10px', fontFamily: '"Courier New", monospace',
+        fontSize: '10px', fontFamily: FONT,
         color: '#666688',
       }).setOrigin(0.5));
 
       // Ability badge
       if (isUnlocked && captain.abilityName !== 'None') {
         card.add(this.add.text(0, 410, `\u26A1 ${captain.abilityName}`, {
-          fontSize: '12px', fontFamily: '"Courier New", monospace',
+          fontSize: '12px', fontFamily: FONT,
           color: `#${theme.accent.toString(16).padStart(6, '0')}`,
         }).setOrigin(0.5));
       }
@@ -217,14 +218,14 @@ export class CaptainSelectScene extends Phaser.Scene {
         lockG.strokePath();
         card.add(lockG);
         card.add(this.add.text(0, 220, 'LOCKED', {
-          fontSize: '16px', fontFamily: '"Courier New", monospace', fontStyle: 'bold', color: '#555555',
+          fontSize: '16px', fontFamily: FONT, fontStyle: 'bold', color: '#555555',
         }).setOrigin(0.5));
       }
 
       // Tap to flip hint
       if (isUnlocked) {
         card.add(this.add.text(0, 440, 'TAP FOR STATS', {
-          fontSize: '9px', fontFamily: '"Courier New", monospace', color: '#333355',
+          fontSize: '9px', fontFamily: FONT, color: '#333355',
         }).setOrigin(0.5));
       }
     } else {
@@ -303,7 +304,7 @@ export class CaptainSelectScene extends Phaser.Scene {
 
     if (!state.flipped) {
       card.add(this.add.text(0, 16, captain.name.toUpperCase(), {
-        fontSize: '18px', fontFamily: '"Courier New", monospace', fontStyle: 'bold',
+        fontSize: '18px', fontFamily: FONT, fontStyle: 'bold',
         color: isUnlocked ? `#${theme.primary.toString(16).padStart(6, '0')}` : '#444444',
       }).setOrigin(0.5));
 
@@ -320,12 +321,12 @@ export class CaptainSelectScene extends Phaser.Scene {
       card.add(dotG);
 
       card.add(this.add.text(0, 388, state.side === 'creature' ? 'CREATURE' : 'SHIP', {
-        fontSize: '10px', fontFamily: '"Courier New", monospace', color: '#666688',
+        fontSize: '10px', fontFamily: FONT, color: '#666688',
       }).setOrigin(0.5));
 
       if (isUnlocked && captain.abilityName !== 'None') {
         card.add(this.add.text(0, 410, `\u26A1 ${captain.abilityName}`, {
-          fontSize: '12px', fontFamily: '"Courier New", monospace',
+          fontSize: '12px', fontFamily: FONT,
           color: `#${theme.accent.toString(16).padStart(6, '0')}`,
         }).setOrigin(0.5));
       }
@@ -340,13 +341,13 @@ export class CaptainSelectScene extends Phaser.Scene {
         lockG.strokePath();
         card.add(lockG);
         card.add(this.add.text(0, 220, 'LOCKED', {
-          fontSize: '16px', fontFamily: '"Courier New", monospace', fontStyle: 'bold', color: '#555555',
+          fontSize: '16px', fontFamily: FONT, fontStyle: 'bold', color: '#555555',
         }).setOrigin(0.5));
       }
 
       if (isUnlocked) {
         card.add(this.add.text(0, 440, 'TAP FOR STATS', {
-          fontSize: '9px', fontFamily: '"Courier New", monospace', color: '#333355',
+          fontSize: '9px', fontFamily: FONT, color: '#333355',
         }).setOrigin(0.5));
       }
     } else {
@@ -387,7 +388,7 @@ export class CaptainSelectScene extends Phaser.Scene {
     theme: { primary: number; accent: number }, isUnlocked: boolean, isEquipped: boolean
   ) {
     card.add(this.add.text(0, 20, captain.name.toUpperCase(), {
-      fontSize: '20px', fontFamily: '"Courier New", monospace', fontStyle: 'bold',
+      fontSize: '20px', fontFamily: FONT, fontStyle: 'bold',
       color: `#${theme.primary.toString(16).padStart(6, '0')}`,
     }).setOrigin(0.5));
 
@@ -408,10 +409,10 @@ export class CaptainSelectScene extends Phaser.Scene {
     stats.forEach((s, i) => {
       const sy = 70 + i * 52;
       card.add(this.add.text(-CARD_W / 2 + 24, sy, s.label, {
-        fontSize: '11px', fontFamily: '"Courier New", monospace', fontStyle: 'bold', color: '#888899',
+        fontSize: '11px', fontFamily: FONT, fontStyle: 'bold', color: '#888899',
       }));
       card.add(this.add.text(CARD_W / 2 - 24, sy, String(s.val), {
-        fontSize: '14px', fontFamily: '"Courier New", monospace', fontStyle: 'bold', color: '#ffffff',
+        fontSize: '14px', fontFamily: FONT, fontStyle: 'bold', color: '#ffffff',
       }).setOrigin(1, 0));
 
       const barG = this.add.graphics();
@@ -435,18 +436,18 @@ export class CaptainSelectScene extends Phaser.Scene {
     card.add(abDivG);
 
     card.add(this.add.text(0, abilY + 16, `\u26A1 ${captain.abilityName.toUpperCase()}`, {
-      fontSize: '14px', fontFamily: '"Courier New", monospace', fontStyle: 'bold',
+      fontSize: '14px', fontFamily: FONT, fontStyle: 'bold',
       color: `#${theme.accent.toString(16).padStart(6, '0')}`,
     }).setOrigin(0.5));
 
     card.add(this.add.text(0, abilY + 40, captain.abilityDescription, {
-      fontSize: '11px', fontFamily: '"Courier New", monospace', color: '#aaaaaa',
+      fontSize: '11px', fontFamily: FONT, color: '#aaaaaa',
       wordWrap: { width: CARD_W - 50 }, align: 'center',
     }).setOrigin(0.5, 0));
 
     if (captain.abilityCooldown > 0) {
       card.add(this.add.text(0, abilY + 80, `Cooldown: ${captain.abilityCooldown}s  |  Duration: ${captain.abilityDuration > 0 ? captain.abilityDuration + 's' : 'Instant'}`, {
-        fontSize: '10px', fontFamily: '"Courier New", monospace', color: '#666688',
+        fontSize: '10px', fontFamily: FONT, color: '#666688',
       }).setOrigin(0.5));
     }
 
@@ -464,7 +465,7 @@ export class CaptainSelectScene extends Phaser.Scene {
 
     // Tap to flip back
     card.add(this.add.text(0, 445, 'TAP TO FLIP', {
-      fontSize: '9px', fontFamily: '"Courier New", monospace', color: '#333355',
+      fontSize: '9px', fontFamily: FONT, color: '#333355',
     }).setOrigin(0.5));
   }
 

@@ -1,6 +1,7 @@
 import { HpBar } from './hp-bar';
 import { Button } from './button';
 import { CooldownRing } from './cooldown-ring';
+import { FONT } from '@/ui/theme';
 
 const GAME_WIDTH = 390;
 const GAME_HEIGHT = 844;
@@ -31,7 +32,7 @@ export class HUD extends Phaser.Scene {
     const hpLabel = this.add.text(hpPadX, hpPadY - 12, 'HP', {
       fontSize: '10px',
       color: '#aaffaa',
-      fontFamily: 'Arial, sans-serif',
+      fontFamily: FONT,
     });
     hpLabel.setDepth(10);
 
@@ -39,7 +40,7 @@ export class HUD extends Phaser.Scene {
     this.scoreText = this.add.text(GAME_WIDTH - 16, hpPadY + 8, '0', {
       fontSize: '16px',
       color: '#ffffff',
-      fontFamily: 'Arial, sans-serif',
+      fontFamily: FONT,
       align: 'right',
     }).setOrigin(1, 0.5);
     this.scoreText.setDepth(10);
@@ -53,7 +54,7 @@ export class HUD extends Phaser.Scene {
     const bossLabel = this.add.text(GAME_WIDTH / 2, hpPadY - 12, 'BOSS', {
       fontSize: '10px',
       color: '#ffaaaa',
-      fontFamily: 'Arial, sans-serif',
+      fontFamily: FONT,
       align: 'center',
     }).setOrigin(0.5, 0);
     bossLabel.setDepth(10);

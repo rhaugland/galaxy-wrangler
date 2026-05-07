@@ -1,5 +1,6 @@
 import { Button } from '@/ui/button';
 import { InputSystem } from '@/systems/input-system';
+import { FONT } from '@/ui/theme';
 
 interface Settings {
   tiltSensitivity: number;
@@ -57,7 +58,7 @@ export class SettingsScene extends Phaser.Scene {
     // Title
     this.add.text(cx, 48, 'Settings', {
       fontSize: '30px',
-      fontFamily: 'Arial, sans-serif',
+      fontFamily: FONT,
       color: '#ffffff',
       stroke: '#4444cc',
       strokeThickness: 3,
@@ -149,7 +150,7 @@ export class SettingsScene extends Phaser.Scene {
 
     this.add.text(cx, y, label, {
       fontSize: '16px',
-      fontFamily: 'Arial, sans-serif',
+      fontFamily: FONT,
       color: '#ccccff',
     }).setOrigin(0.5);
 
@@ -161,7 +162,7 @@ export class SettingsScene extends Phaser.Scene {
     // Fill
     const fillGfx = this.add.graphics();
     const valueText = this.add.text(cx + W / 2 + 12, trackY, '', {
-      fontSize: '13px', fontFamily: 'Arial, sans-serif', color: '#aaffaa',
+      fontSize: '13px', fontFamily: FONT, color: '#aaffaa',
     }).setOrigin(0, 0.5);
 
     const drawFill = (val: number) => {
@@ -207,7 +208,7 @@ export class SettingsScene extends Phaser.Scene {
   ) {
     this.add.text(cx - 60, y, label, {
       fontSize: '16px',
-      fontFamily: 'Arial, sans-serif',
+      fontFamily: FONT,
       color: '#ccccff',
     }).setOrigin(1, 0.5);
 
