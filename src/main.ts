@@ -20,6 +20,10 @@ const config: Phaser.Types.Core.GameConfig = {
   height: 844,
   parent: 'game',
   backgroundColor: '#000000',
+  pixelArt: false,
+  antialias: true,
+  roundPixels: true,
+  resolution: window.devicePixelRatio || 1,
   physics: { default: 'arcade', arcade: { gravity: { x: 0, y: 0 }, debug: false } },
   scale: {
     mode: Phaser.Scale.FIT,

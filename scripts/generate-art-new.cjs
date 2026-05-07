@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 const OUT = path.join(__dirname, '..', 'public', 'art');
-const SIZE = 280;
+const SIZE = 512; // px square — high-res for Retina displays
 
 function save(canvas, name) {
   fs.writeFileSync(path.join(OUT, `${name}.png`), canvas.toBuffer('image/png'));
