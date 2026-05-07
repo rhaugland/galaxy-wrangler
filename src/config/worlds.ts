@@ -1,0 +1,241 @@
+import type { WorldDef, Captain } from '../models/types';
+
+export const CAPTAINS: Record<string, Captain> = {
+  base: {
+    id: 'base',
+    name: 'Commander',
+    stats: { hp: 100, damage: 10, speed: 5, shield: 0 },
+    abilityName: 'None',
+    abilityDescription: 'No special ability.',
+    abilityCooldown: 0,
+    abilityDuration: 0,
+  },
+
+  // World 1 — Nebula Fields creatures
+  nebula_jelly: {
+    id: 'nebula_jelly',
+    name: 'Nebula Jelly',
+    stats: { hp: 90, damage: 8, speed: 7, shield: 0 },
+    abilityName: 'Phase Through',
+    abilityDescription: 'Briefly phases through incoming projectiles.',
+    abilityCooldown: 8,
+    abilityDuration: 1.5,
+  },
+  nebula_wisp: {
+    id: 'nebula_wisp',
+    name: 'Nebula Wisp',
+    stats: { hp: 80, damage: 10, speed: 10, shield: 0 },
+    abilityName: 'Speed Burst',
+    abilityDescription: 'Temporarily doubles movement speed.',
+    abilityCooldown: 10,
+    abilityDuration: 2,
+  },
+  nebula_titan: {
+    id: 'nebula_titan',
+    name: 'Nebula Titan',
+    stats: { hp: 130, damage: 16, speed: 4, shield: 5 },
+    abilityName: 'Damage Aura',
+    abilityDescription: 'Radiates energy that boosts outgoing damage.',
+    abilityCooldown: 12,
+    abilityDuration: 3,
+  },
+
+  // World 2 — Ice Frontier creatures
+  ice_shard: {
+    id: 'ice_shard',
+    name: 'Ice Shard',
+    stats: { hp: 110, damage: 14, speed: 6, shield: 5 },
+    abilityName: 'Freeze',
+    abilityDescription: 'Freezes nearby enemies briefly.',
+    abilityCooldown: 10,
+    abilityDuration: 2,
+  },
+  ice_prism: {
+    id: 'ice_prism',
+    name: 'Ice Prism',
+    stats: { hp: 100, damage: 18, speed: 7, shield: 8 },
+    abilityName: 'Reflect',
+    abilityDescription: 'Reflects a portion of incoming damage back at attackers.',
+    abilityCooldown: 12,
+    abilityDuration: 2.5,
+  },
+  ice_golem: {
+    id: 'ice_golem',
+    name: 'Ice Golem',
+    stats: { hp: 160, damage: 20, speed: 4, shield: 12 },
+    abilityName: 'Temp Armor',
+    abilityDescription: 'Temporarily boosts shield to absorb heavy hits.',
+    abilityCooldown: 14,
+    abilityDuration: 3,
+  },
+
+  // World 3 — Inferno Core creatures
+  flame_sprite: {
+    id: 'flame_sprite',
+    name: 'Flame Sprite',
+    stats: { hp: 120, damage: 20, speed: 8, shield: 0 },
+    abilityName: 'Fire Burst AOE',
+    abilityDescription: 'Unleashes an area-of-effect fire explosion.',
+    abilityCooldown: 10,
+    abilityDuration: 1.5,
+  },
+  flame_drake: {
+    id: 'flame_drake',
+    name: 'Flame Drake',
+    stats: { hp: 140, damage: 24, speed: 7, shield: 5 },
+    abilityName: 'Homing Fireballs',
+    abilityDescription: 'Launches homing fireballs that track enemies.',
+    abilityCooldown: 12,
+    abilityDuration: 3,
+  },
+  flame_colossus: {
+    id: 'flame_colossus',
+    name: 'Flame Colossus',
+    stats: { hp: 200, damage: 30, speed: 5, shield: 10 },
+    abilityName: 'Shockwave',
+    abilityDescription: 'Sends out a devastating shockwave in all directions.',
+    abilityCooldown: 15,
+    abilityDuration: 2,
+  },
+};
+
+export const WORLDS: WorldDef[] = [
+  {
+    id: 'nebula_fields',
+    name: 'Nebula Fields',
+    theme: 'nebula',
+    levels: [
+      {
+        tier: 'star',
+        travelDistance: 1000,
+        obstacleDensity: 0.3,
+        boss: {
+          name: 'Nebula Drifter',
+          hp: 200,
+          style: 'auto_dodge',
+          coinBonus: 30,
+          replayCoinBonus: 10,
+        },
+        creatureReward: CAPTAINS.nebula_jelly,
+      },
+      {
+        tier: 'constellation',
+        travelDistance: 2000,
+        obstacleDensity: 0.5,
+        boss: {
+          name: 'Nebula Specter',
+          hp: 500,
+          style: 'auto_dodge',
+          coinBonus: 70,
+          replayCoinBonus: 20,
+        },
+        creatureReward: CAPTAINS.nebula_wisp,
+      },
+      {
+        tier: 'galaxy',
+        travelDistance: 3500,
+        obstacleDensity: 0.7,
+        boss: {
+          name: 'Nebula Overlord',
+          hp: 1000,
+          style: 'auto_dodge',
+          coinBonus: 150,
+          replayCoinBonus: 40,
+        },
+        creatureReward: CAPTAINS.nebula_titan,
+      },
+    ],
+  },
+  {
+    id: 'ice_frontier',
+    name: 'Ice Frontier',
+    theme: 'ice',
+    levels: [
+      {
+        tier: 'star',
+        travelDistance: 1200,
+        obstacleDensity: 0.4,
+        boss: {
+          name: 'Ice Sentinel',
+          hp: 220,
+          style: 'tap_shoot',
+          coinBonus: 35,
+          replayCoinBonus: 12,
+        },
+        creatureReward: CAPTAINS.ice_shard,
+      },
+      {
+        tier: 'constellation',
+        travelDistance: 2500,
+        obstacleDensity: 0.6,
+        boss: {
+          name: 'Frost Warden',
+          hp: 520,
+          style: 'tap_shoot',
+          coinBonus: 80,
+          replayCoinBonus: 25,
+        },
+        creatureReward: CAPTAINS.ice_prism,
+      },
+      {
+        tier: 'galaxy',
+        travelDistance: 4000,
+        obstacleDensity: 0.75,
+        boss: {
+          name: 'Glacial Tyrant',
+          hp: 1050,
+          style: 'tap_shoot',
+          coinBonus: 170,
+          replayCoinBonus: 45,
+        },
+        creatureReward: CAPTAINS.ice_golem,
+      },
+    ],
+  },
+  {
+    id: 'inferno_core',
+    name: 'Inferno Core',
+    theme: 'inferno',
+    levels: [
+      {
+        tier: 'star',
+        travelDistance: 1500,
+        obstacleDensity: 0.5,
+        boss: {
+          name: 'Ember Brute',
+          hp: 240,
+          style: 'ram_retreat',
+          coinBonus: 40,
+          replayCoinBonus: 15,
+        },
+        creatureReward: CAPTAINS.flame_sprite,
+      },
+      {
+        tier: 'constellation',
+        travelDistance: 3000,
+        obstacleDensity: 0.65,
+        boss: {
+          name: 'Inferno Ravager',
+          hp: 550,
+          style: 'ram_retreat',
+          coinBonus: 90,
+          replayCoinBonus: 30,
+        },
+        creatureReward: CAPTAINS.flame_drake,
+      },
+      {
+        tier: 'galaxy',
+        travelDistance: 5000,
+        obstacleDensity: 0.8,
+        boss: {
+          name: 'Core Annihilator',
+          hp: 1100,
+          style: 'ram_retreat',
+          coinBonus: 200,
+          replayCoinBonus: 60,
+        },
+        creatureReward: CAPTAINS.flame_colossus,
+      },
+    ],
+  },
+];
