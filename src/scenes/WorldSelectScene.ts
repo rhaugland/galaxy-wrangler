@@ -12,6 +12,8 @@ export class WorldSelectScene extends Phaser.Scene {
   constructor() { super('WorldSelect'); }
 
   create() {
+    this.cameras.main.fadeIn(300, 0, 0, 0);
+
     const W = 390;
     const cx = W / 2;
     const save: SaveData = this.registry.get('save') ?? {
@@ -101,7 +103,10 @@ export class WorldSelectScene extends Phaser.Scene {
             cardY + 38,
             label,
             () => {
-              this.scene.start('Travel', { worldId: world.id, levelIndex: li });
+              this.cameras.main.fadeOut(300, 0, 0, 0);
+              this.cameras.main.once('camerafadeoutcomplete', () => {
+                this.scene.start('Travel', { worldId: world.id, levelIndex: li });
+              });
             },
             86,
             40
@@ -111,6 +116,11 @@ export class WorldSelectScene extends Phaser.Scene {
       }
     });
 
-    new Button(this, cx, 780, 'Back', () => this.scene.start('MainMenu'), 140, 44);
+    new Button(this, cx, 780, 'Back', () => {
+      this.cameras.main.fadeOut(300, 0, 0, 0);
+      this.cameras.main.once('camerafadeoutcomplete', () => {
+        this.scene.start('MainMenu');
+      });
+    }, 140, 44);
   }
 }

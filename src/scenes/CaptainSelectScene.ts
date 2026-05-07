@@ -25,6 +25,8 @@ export class CaptainSelectScene extends Phaser.Scene {
   constructor() { super('CaptainSelect'); }
 
   create() {
+    this.cameras.main.fadeIn(300, 0, 0, 0);
+
     const W = 390;
     const cx = W / 2;
 
@@ -59,7 +61,12 @@ export class CaptainSelectScene extends Phaser.Scene {
     this.statsContainer = this.add.container(0, 0);
     this.drawStatsPanel();
 
-    new Button(this, cx, 800, 'Back', () => this.scene.start('MainMenu'), 140, 44);
+    new Button(this, cx, 800, 'Back', () => {
+      this.cameras.main.fadeOut(300, 0, 0, 0);
+      this.cameras.main.once('camerafadeoutcomplete', () => {
+        this.scene.start('MainMenu');
+      });
+    }, 140, 44);
   }
 
   private drawPortrait(id: string, x: number, y: number) {

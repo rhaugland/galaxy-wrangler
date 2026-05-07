@@ -86,6 +86,8 @@ export class TravelScene extends Phaser.Scene {
   }
 
   async create() {
+    this.cameras.main.fadeIn(300, 0, 0, 0);
+
     // --- Look up world / level ---
     const world = WORLDS.find((w) => w.id === this.worldId);
     if (!world) {

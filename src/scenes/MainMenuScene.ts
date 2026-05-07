@@ -23,6 +23,8 @@ export class MainMenuScene extends Phaser.Scene {
   constructor() { super('MainMenu'); }
 
   async create() {
+    this.cameras.main.fadeIn(300, 0, 0, 0);
+
     const W = 390;
     const H = 844;
     const cx = W / 2;
@@ -53,12 +55,12 @@ export class MainMenuScene extends Phaser.Scene {
     // Main buttons
     const btnW = 220;
     const btnH = 56;
-    new Button(this, cx, 360, 'Play', () => this.scene.start('WorldSelect'), btnW, btnH);
-    new Button(this, cx, 430, 'Shop', () => this.scene.start('Shop'), btnW, btnH);
-    new Button(this, cx, 500, 'Captains', () => this.scene.start('CaptainSelect'), btnW, btnH);
+    new Button(this, cx, 360, 'Play', () => this.transitionTo('WorldSelect'), btnW, btnH);
+    new Button(this, cx, 430, 'Shop', () => this.transitionTo('Shop'), btnW, btnH);
+    new Button(this, cx, 500, 'Captains', () => this.transitionTo('CaptainSelect'), btnW, btnH);
 
     // Settings gear in top-right
-    new Button(this, W - 36, 36, '\u2699', () => this.scene.start('Settings'), 44, 44);
+    new Button(this, W - 36, 36, '\u2699', () => this.transitionTo('Settings'), 44, 44);
 
     // Load save and show player info at bottom
     const mgr = new SaveManager(new IDBBackend());
@@ -80,6 +82,13 @@ export class MainMenuScene extends Phaser.Scene {
       fontFamily: 'Arial, sans-serif',
       color: '#ffdd44',
     }).setOrigin(0.5);
+  }
+
+  private transitionTo(sceneKey: string, data?: object) {
+    this.cameras.main.fadeOut(300, 0, 0, 0);
+    this.cameras.main.once('camerafadeoutcomplete', () => {
+      this.scene.start(sceneKey, data);
+    });
   }
 
   private drawShip(x: number, y: number, angle: number) {

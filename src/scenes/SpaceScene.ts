@@ -28,6 +28,8 @@ export class SpaceScene extends Phaser.Scene {
   }
 
   create() {
+    this.cameras.main.fadeIn(300, 0, 0, 0);
+
     const playerLevel: number = this.registry.get('playerLevel') ?? 0;
     const missions = generateMissionBoard(playerLevel);
 
@@ -54,7 +56,12 @@ export class SpaceScene extends Phaser.Scene {
       fontSize: '18px',
       color: '#aaccff',
     }).setOrigin(0.5, 0.5);
-    backBg.on('pointerup', () => this.scene.start('MainMenu'));
+    backBg.on('pointerup', () => {
+      this.cameras.main.fadeOut(300, 0, 0, 0);
+      this.cameras.main.once('camerafadeoutcomplete', () => {
+        this.scene.start('MainMenu');
+      });
+    });
     backBg.on('pointerover', () => backBg.setFillStyle(0x556688));
     backBg.on('pointerout', () => backBg.setFillStyle(0x334466));
   }
@@ -105,7 +112,10 @@ export class SpaceScene extends Phaser.Scene {
 
     // Tap to start
     cardBg.on('pointerup', () => {
-      this.scene.start('Mission', { mission });
+      this.cameras.main.fadeOut(300, 0, 0, 0);
+      this.cameras.main.once('camerafadeoutcomplete', () => {
+        this.scene.start('Mission', { mission });
+      });
     });
     cardBg.on('pointerover', () => cardBg.setFillStyle(0x242440));
     cardBg.on('pointerout', () => cardBg.setFillStyle(0x1a1a2e));

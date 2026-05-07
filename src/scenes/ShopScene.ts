@@ -22,6 +22,8 @@ export class ShopScene extends Phaser.Scene {
   constructor() { super('Shop'); }
 
   create() {
+    this.cameras.main.fadeIn(300, 0, 0, 0);
+
     const W = 390;
     const cx = W / 2;
 
@@ -59,7 +61,12 @@ export class ShopScene extends Phaser.Scene {
     this.refreshItems();
 
     // Back button
-    new Button(this, cx, 800, 'Back', () => this.scene.start('MainMenu'), 140, 44);
+    new Button(this, cx, 800, 'Back', () => {
+      this.cameras.main.fadeOut(300, 0, 0, 0);
+      this.cameras.main.once('camerafadeoutcomplete', () => {
+        this.scene.start('MainMenu');
+      });
+    }, 140, 44);
   }
 
   private refreshItems() {
