@@ -9,6 +9,34 @@ const CARD_H = 460;
 const CARD_GAP = 30;
 const CARD_X = W / 2;
 
+// Phaser 3 Graphics helpers for missing methods
+function drawStar(g: Phaser.GameObjects.Graphics, cx: number, cy: number, points: number, outerR: number, innerR: number) {
+  g.beginPath();
+  for (let i = 0; i < points * 2; i++) {
+    const r = i % 2 === 0 ? outerR : innerR;
+    const angle = (i / (points * 2)) * Math.PI * 2 - Math.PI / 2;
+    const px = cx + Math.cos(angle) * r;
+    const py = cy + Math.sin(angle) * r;
+    if (i === 0) g.moveTo(px, py); else g.lineTo(px, py);
+  }
+  g.closePath();
+  g.fillPath();
+}
+
+function curveTo(g: Phaser.GameObjects.Graphics, x1: number, y1: number, x2: number, y2: number, ex: number, ey: number) {
+  // Approximate bezier with line segments
+  const sx = g.commandBuffer ? 0 : 0; // just use lineTo as approximation
+  const steps = 8;
+  // We don't have the start point easily, so just draw lines through control points
+  for (let t = 0; t <= 1; t += 1 / steps) {
+    // simple quadratic-ish approximation
+    const mt = 1 - t;
+    const px = mt * mt * x1 + 2 * mt * t * x2 + t * t * ex;
+    const py = mt * mt * y1 + 2 * mt * t * y2 + t * t * ey;
+    g.lineTo(px, py);
+  }
+}
+
 // Theme colors per captain
 const THEMES: Record<string, { primary: number; accent: number; bg: number }> = {
   base:           { primary: 0x00ffff, accent: 0xff69b4, bg: 0x0a0a1a },
@@ -499,7 +527,7 @@ export class CaptainSelectScene extends Phaser.Scene {
     g.fillCircle(cx + 22, cy, 8);
     // Star badge
     g.fillStyle(0xffdd44, a);
-    g.fillStar(cx, cy + 8, 5, 8, 4);
+    drawStar(g,cx, cy + 8, 5, 8, 4);
   }
 
   private drawJellyfish(g: Phaser.GameObjects.Graphics, cx: number, cy: number, a: number) {
@@ -558,17 +586,20 @@ export class CaptainSelectScene extends Phaser.Scene {
     g.lineStyle(3, 0xaa88ff, a * 0.4);
     g.beginPath();
     g.moveTo(cx - 20, cy + 10);
-    g.bezierCurveTo(cx - 30, cy + 35, cx - 10, cy + 50, cx - 25, cy + 65);
+    g.lineTo(cx - 28, cy + 35);
+    g.lineTo(cx - 25, cy + 65);
     g.strokePath();
     g.lineStyle(2, 0xccaaff, a * 0.3);
     g.beginPath();
     g.moveTo(cx + 15, cy + 10);
-    g.bezierCurveTo(cx + 25, cy + 40, cx + 5, cy + 55, cx + 20, cy + 65);
+    g.lineTo(cx + 22, cy + 38);
+    g.lineTo(cx + 20, cy + 65);
     g.strokePath();
     g.lineStyle(2, 0x8866dd, a * 0.3);
     g.beginPath();
     g.moveTo(cx, cy + 15);
-    g.bezierCurveTo(cx - 5, cy + 40, cx + 5, cy + 55, cx, cy + 70);
+    g.lineTo(cx - 3, cy + 42);
+    g.lineTo(cx, cy + 70);
     g.strokePath();
     // Eyes — bright dots
     g.fillStyle(0xffffff, a * 0.9);
@@ -580,7 +611,7 @@ export class CaptainSelectScene extends Phaser.Scene {
     // Sparkles around
     g.fillStyle(0xffffff, a * 0.6);
     [[-30, -25], [28, -20], [-22, 20], [25, 30], [0, -45]].forEach(([ox, oy]) => {
-      g.fillStar(cx + ox, cy + oy, 3, 1.5, 4);
+      drawStar(g,cx + ox, cy + oy, 3, 1.5, 4);
     });
   }
 
@@ -613,7 +644,7 @@ export class CaptainSelectScene extends Phaser.Scene {
     g.fillTriangle(cx + 38, cy - 5, cx + 52, cy - 20, cx + 30, cy - 15);
     // Core crystal
     g.fillStyle(0xff44aa, a * 0.6);
-    g.fillStar(cx, cy + 10, 8, 14, 4);
+    drawStar(g,cx, cy + 10, 8, 14, 4);
   }
 
   private drawIceShard(g: Phaser.GameObjects.Graphics, cx: number, cy: number, a: number) {
@@ -649,7 +680,7 @@ export class CaptainSelectScene extends Phaser.Scene {
     // Frost particles
     g.fillStyle(0xffffff, a * 0.5);
     [[-25, -35], [30, -30], [-35, 0], [35, 5], [0, 40], [-15, 35]].forEach(([ox, oy]) => {
-      g.fillStar(cx + ox, cy + oy, 2, 1, 6);
+      drawStar(g,cx + ox, cy + oy, 2, 1, 6);
     });
   }
 
@@ -822,7 +853,8 @@ export class CaptainSelectScene extends Phaser.Scene {
     g.lineStyle(4, 0xcc3300, a * 0.7);
     g.beginPath();
     g.moveTo(cx, cy + 28);
-    g.bezierCurveTo(cx + 15, cy + 45, cx + 30, cy + 50, cx + 20, cy + 60);
+    g.lineTo(cx + 15, cy + 45);
+    g.lineTo(cx + 20, cy + 60);
     g.strokePath();
     g.fillStyle(0xff6600, a * 0.8);
     g.fillTriangle(cx + 20, cy + 58, cx + 14, cy + 68, cx + 28, cy + 65);
@@ -943,11 +975,11 @@ export class CaptainSelectScene extends Phaser.Scene {
     g.fillStyle(0xaa88ff, a * 0.3); g.fillTriangle(cx, cy - 35, cx - 18, cy + 15, cx + 18, cy + 15);
     // Energy wings
     g.lineStyle(2, 0xaa88ff, a * 0.5);
-    g.beginPath(); g.moveTo(cx - 25, cy + 5); g.bezierCurveTo(cx - 50, cy - 20, cx - 55, cy + 10, cx - 35, cy + 25); g.strokePath();
-    g.beginPath(); g.moveTo(cx + 25, cy + 5); g.bezierCurveTo(cx + 50, cy - 20, cx + 55, cy + 10, cx + 35, cy + 25); g.strokePath();
+    g.beginPath(); g.moveTo(cx - 25, cy + 5); g.lineTo(cx - 50, cy - 15); g.lineTo(cx - 35, cy + 25); g.strokePath();
+    g.beginPath(); g.moveTo(cx + 25, cy + 5); g.lineTo(cx + 50, cy - 15); g.lineTo(cx + 35, cy + 25); g.strokePath();
     g.fillStyle(0xccaaff, a * 0.5); g.fillCircle(cx, cy - 10, 8);
     g.fillStyle(0xffffff, a * 0.5);
-    [[-18, -20], [20, -18], [0, -35]].forEach(([ox, oy]) => g.fillStar(cx + ox, cy + oy, 2, 1, 4));
+    [[-18, -20], [20, -18], [0, -35]].forEach(([ox, oy]) => drawStar(g,cx + ox, cy + oy, 2, 1, 4));
   }
 
   private drawTitanShip(g: Phaser.GameObjects.Graphics, cx: number, cy: number, a: number) {

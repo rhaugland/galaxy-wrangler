@@ -489,7 +489,17 @@ export class MissionScene extends Phaser.Scene {
     const x = Phaser.Math.Between(20, CANVAS_W - 20);
     const gfx = this.add.graphics();
     gfx.fillStyle(0xffee44, 1);
-    gfx.fillStar(0, 0, 5, 8, 4);
+    // Draw star shape manually (fillStar not in Phaser 3)
+    gfx.beginPath();
+    for (let i = 0; i < 10; i++) {
+      const r = i % 2 === 0 ? 8 : 4;
+      const angle = (i / 10) * Math.PI * 2 - Math.PI / 2;
+      const px = Math.cos(angle) * r;
+      const py = Math.sin(angle) * r;
+      if (i === 0) gfx.moveTo(px, py); else gfx.lineTo(px, py);
+    }
+    gfx.closePath();
+    gfx.fillPath();
     gfx.x = x;
     gfx.y = -20;
     this.pickups.push({ graphics: gfx, x, y: -20, alive: true });
