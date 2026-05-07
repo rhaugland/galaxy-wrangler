@@ -109,8 +109,8 @@ export class MainMenuScene extends Phaser.Scene {
     const btnW = 240;
     const btnH = 56;
     new Button(this, cx, 460, 'PLAY', () => this.transitionTo('WorldSelect'), btnW, btnH);
-    new Button(this, cx, 530, 'SHOP', () => this.transitionTo('Shop'), btnW, btnH);
-    new Button(this, cx, 600, 'CAPTAINS', () => this.transitionTo('CaptainSelect'), btnW, btnH);
+    new Button(this, cx, 530, 'COSMO CANTINA', () => this.transitionTo('Shop'), btnW, btnH);
+    new Button(this, cx, 600, 'FLEET', () => this.transitionTo('CaptainSelect'), btnW, btnH);
 
     // Settings gear in top-right
     new Button(this, W - 36, 36, '\u2699', () => this.transitionTo('Settings'), 44, 44);
