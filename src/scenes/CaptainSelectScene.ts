@@ -115,10 +115,10 @@ export class CaptainSelectScene extends Phaser.Scene {
     });
 
     // Mask the scroll area
-    const mask = this.add.graphics();
-    mask.fillStyle(0xffffff);
-    mask.fillRect(0, 70, W, 710);
-    this.scrollContainer.setMask(mask.createGeometryMask());
+    const maskShape = this.make.graphics({ add: false });
+    maskShape.fillStyle(0xffffff);
+    maskShape.fillRect(0, 70, W, 710);
+    this.scrollContainer.setMask(maskShape.createGeometryMask());
   }
 
   update(_t: number, delta: number) {
