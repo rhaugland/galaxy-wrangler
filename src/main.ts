@@ -9,6 +9,7 @@ import { TravelScene } from './scenes/TravelScene';
 import { BossScene } from './scenes/BossScene';
 import { SpaceScene } from './scenes/SpaceScene';
 import { MissionScene } from './scenes/MissionScene';
+import { HUD } from './ui/hud';
 
 const config: Phaser.Types.Core.GameConfig = {
   type: Phaser.AUTO,
@@ -32,6 +33,7 @@ const config: Phaser.Types.Core.GameConfig = {
     BossScene,
     SpaceScene,
     MissionScene,
+    HUD,
   ],
 };
 
