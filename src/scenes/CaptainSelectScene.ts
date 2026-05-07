@@ -23,20 +23,6 @@ function drawStar(g: Phaser.GameObjects.Graphics, cx: number, cy: number, points
   g.fillPath();
 }
 
-function curveTo(g: Phaser.GameObjects.Graphics, x1: number, y1: number, x2: number, y2: number, ex: number, ey: number) {
-  // Approximate bezier with line segments
-  const sx = g.commandBuffer ? 0 : 0; // just use lineTo as approximation
-  const steps = 8;
-  // We don't have the start point easily, so just draw lines through control points
-  for (let t = 0; t <= 1; t += 1 / steps) {
-    // simple quadratic-ish approximation
-    const mt = 1 - t;
-    const px = mt * mt * x1 + 2 * mt * t * x2 + t * t * ex;
-    const py = mt * mt * y1 + 2 * mt * t * y2 + t * t * ey;
-    g.lineTo(px, py);
-  }
-}
-
 // Theme colors per captain
 const THEMES: Record<string, { primary: number; accent: number; bg: number }> = {
   base:           { primary: 0x00ffff, accent: 0xff69b4, bg: 0x0a0a1a },
