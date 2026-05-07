@@ -1,4 +1,4 @@
-import type { WorldDef, Captain } from '../models/types';
+import type { WorldDef, Captain, UniverseDef } from '../models/types';
 
 export const CAPTAINS: Record<string, Captain> = {
   base: {
@@ -11,7 +11,7 @@ export const CAPTAINS: Record<string, Captain> = {
     abilityDuration: 0,
   },
 
-  // World 1 — Nebula Fields creatures
+  // Nebula creatures
   nebula_jelly: {
     id: 'nebula_jelly',
     name: 'Nebula Jelly',
@@ -40,7 +40,7 @@ export const CAPTAINS: Record<string, Captain> = {
     abilityDuration: 5,
   },
 
-  // World 2 — Ice Frontier creatures
+  // Ice creatures
   ice_shard: {
     id: 'ice_shard',
     name: 'Ice Shard',
@@ -69,7 +69,7 @@ export const CAPTAINS: Record<string, Captain> = {
     abilityDuration: 4,
   },
 
-  // World 3 — Inferno Core creatures
+  // Flame creatures
   flame_sprite: {
     id: 'flame_sprite',
     name: 'Flame Sprite',
@@ -97,145 +97,415 @@ export const CAPTAINS: Record<string, Captain> = {
     abilityCooldown: 22,
     abilityDuration: 0,
   },
+
+  // Land creatures
+  land_beetle: {
+    id: 'land_beetle',
+    name: 'Rock Beetle',
+    stats: { hp: 160, damage: 22, speed: 4, shield: 18 },
+    abilityName: 'Stone Shell',
+    abilityDescription: 'Reduces all incoming damage by 80% for 4 seconds.',
+    abilityCooldown: 16,
+    abilityDuration: 4,
+  },
+  land_wyrm: {
+    id: 'land_wyrm',
+    name: 'Stone Wyrm',
+    stats: { hp: 170, damage: 26, speed: 5, shield: 15 },
+    abilityName: 'Earthquake',
+    abilityDescription: 'Stuns all enemies for 2.5 seconds and deals 40 damage.',
+    abilityCooldown: 20,
+    abilityDuration: 2.5,
+  },
+  land_colossus: {
+    id: 'land_colossus',
+    name: 'Terra Colossus',
+    stats: { hp: 200, damage: 28, speed: 4, shield: 22 },
+    abilityName: 'Root Grasp',
+    abilityDescription: 'Roots all enemies in place for 3 seconds and drains 20 HP each.',
+    abilityCooldown: 22,
+    abilityDuration: 3,
+  },
+
+  // Electric creatures
+  electric_mote: {
+    id: 'electric_mote',
+    name: 'Spark Mote',
+    stats: { hp: 120, damage: 28, speed: 8, shield: 8 },
+    abilityName: 'Chain Lightning',
+    abilityDescription: 'Lightning arcs between all enemies dealing 25 damage each.',
+    abilityCooldown: 14,
+    abilityDuration: 0,
+  },
+  electric_serpent: {
+    id: 'electric_serpent',
+    name: 'Volt Serpent',
+    stats: { hp: 140, damage: 30, speed: 9, shield: 10 },
+    abilityName: 'Overcharge',
+    abilityDescription: 'Triples fire rate and adds shock damage for 3 seconds.',
+    abilityCooldown: 16,
+    abilityDuration: 3,
+  },
+  electric_titan: {
+    id: 'electric_titan',
+    name: 'Storm Titan',
+    stats: { hp: 190, damage: 32, speed: 7, shield: 18 },
+    abilityName: 'Thunderstorm',
+    abilityDescription: 'Lightning strikes random enemies for 4 seconds, dealing 60 total damage.',
+    abilityCooldown: 24,
+    abilityDuration: 4,
+  },
 };
 
+// ── Universe / Galaxy / Planet structure with lore ──
+
+export const UNIVERSES: UniverseDef[] = [
+  {
+    id: 'prime',
+    name: 'The Prime Universe',
+    galaxies: [
+      {
+        id: 'elemental',
+        name: 'Elemental Galaxy',
+        description: 'A galaxy forged from the five primal elements. Each planet pulses with raw elemental energy, guarded by ancient creatures who have shaped the cosmos since the first stars ignited.',
+        planets: [
+          // ── NEBULA ── (Easiest)
+          {
+            id: 'nebula_fields',
+            name: 'Nebula Drift',
+            theme: 'nebula',
+            description: 'Swirling clouds of violet gas stretch across the void. Luminous particles drift like living constellations, and the silence here hums with ancient whispers.',
+            tiers: [
+              {
+                tier: 'star',
+                name: 'The Violet Ember',
+                lore: 'A dim star cloaked in purple mist. Its light flickers like a heartbeat, and travelers say it sings a melody only the lost can hear.',
+                travelDistance: 1000,
+                obstacleDensity: 0.3,
+                guardian: {
+                  name: 'Nebula Jelly',
+                  lore: 'Born from the condensed dreams of dying stars, the Nebula Jelly drifts through the mist, its tendrils trailing memories of worlds long gone. It does not attack out of malice — it simply cannot tell friend from forgotten.',
+                  hp: 200,
+                  style: 'auto_dodge',
+                  coinBonus: 30,
+                  replayCoinBonus: 10,
+                },
+                creatureReward: CAPTAINS.nebula_jelly,
+              },
+              {
+                tier: 'constellation',
+                name: 'The Whispering Arc',
+                lore: 'Seven stars aligned in a crescent, each one a different shade of violet. Pilots who navigate the arc report hearing voices — fragments of conversations from other timelines.',
+                travelDistance: 2000,
+                obstacleDensity: 0.5,
+                guardian: {
+                  name: 'Nebula Wisp',
+                  lore: 'A fragment of the nebula itself given consciousness. The Wisp flickers between dimensions, never fully here, never fully gone. It guards the arc not by choice but by nature — it is the space between stars made alive.',
+                  hp: 500,
+                  style: 'auto_dodge',
+                  coinBonus: 70,
+                  replayCoinBonus: 20,
+                },
+                creatureReward: CAPTAINS.nebula_wisp,
+              },
+              {
+                tier: 'galaxy',
+                name: 'The Amethyst Vortex',
+                lore: 'At the heart of Nebula Drift lies a spiraling maelstrom of pure cosmic energy. Those who enter emerge changed — if they emerge at all.',
+                travelDistance: 3500,
+                obstacleDensity: 0.7,
+                guardian: {
+                  name: 'Nebula Titan',
+                  lore: 'The firstborn of the nebula, shaped when the galaxy was young. The Titan has witnessed every civilization rise and fall within its domain. It fights not to destroy, but to test — only those worthy may claim the Amethyst Vortex.',
+                  hp: 1000,
+                  style: 'auto_dodge',
+                  coinBonus: 150,
+                  replayCoinBonus: 40,
+                },
+                creatureReward: CAPTAINS.nebula_titan,
+              },
+            ],
+          },
+
+          // ── ICE ── (Medium-Easy)
+          {
+            id: 'ice_frontier',
+            name: 'Glacial Reach',
+            theme: 'ice',
+            description: 'A frozen expanse where starlight refracts through continent-sized ice crystals. Temperature plummets to near absolute zero, and time itself seems to slow.',
+            tiers: [
+              {
+                tier: 'star',
+                name: 'The Frozen Beacon',
+                lore: 'A crystalline star encased in eternal ice. Its cold light guides travelers through the dark, but those who stare too long find their thoughts freezing solid.',
+                travelDistance: 1200,
+                obstacleDensity: 0.4,
+                guardian: {
+                  name: 'Ice Shard',
+                  lore: 'A living crystal that formed when the Frozen Beacon first ignited. The Shard does not think as we do — it calculates, refracts, and strikes with geometric precision. Every facet of its body is a weapon.',
+                  hp: 220,
+                  style: 'tap_shoot',
+                  coinBonus: 35,
+                  replayCoinBonus: 12,
+                },
+                creatureReward: CAPTAINS.ice_shard,
+              },
+              {
+                tier: 'constellation',
+                name: 'The Crystal Lattice',
+                lore: 'A constellation of twelve stars connected by bridges of solid light. The lattice hums with a frequency that can shatter ships that fall out of tune.',
+                travelDistance: 2500,
+                obstacleDensity: 0.6,
+                guardian: {
+                  name: 'Ice Prism',
+                  lore: 'The keeper of the Crystal Lattice, the Prism refracts not just light but reality itself. It can split a single attack into seven and bend space to redirect anything that threatens its domain.',
+                  hp: 520,
+                  style: 'tap_shoot',
+                  coinBonus: 80,
+                  replayCoinBonus: 25,
+                },
+                creatureReward: CAPTAINS.ice_prism,
+              },
+              {
+                tier: 'galaxy',
+                name: 'The Absolute Core',
+                lore: 'The temperature here reaches absolute zero. Motion ceases. Energy stills. Only the strongest will can push through the silent, crystalline void at the heart of Glacial Reach.',
+                travelDistance: 4000,
+                obstacleDensity: 0.75,
+                guardian: {
+                  name: 'Ice Golem',
+                  lore: 'Assembled from the oldest ice in the galaxy — frozen before the first stars formed. The Golem moves slowly but with unstoppable force. Its body regenerates from the infinite cold around it. There is no wearing it down, only overwhelming it.',
+                  hp: 1050,
+                  style: 'tap_shoot',
+                  coinBonus: 170,
+                  replayCoinBonus: 45,
+                },
+                creatureReward: CAPTAINS.ice_golem,
+              },
+            ],
+          },
+
+          // ── FLAME ── (Medium)
+          {
+            id: 'inferno_core',
+            name: 'Inferno Depths',
+            theme: 'inferno',
+            description: 'Rivers of liquid fire flow between charred asteroid fields. The heat is alive here — it breathes, it hungers, and it remembers every ship it has consumed.',
+            tiers: [
+              {
+                tier: 'star',
+                name: 'The Ember Forge',
+                lore: 'A young, furious star that spits molten rock across the void. Forged in violence, it burns with the rage of a billion failed creations.',
+                travelDistance: 1500,
+                obstacleDensity: 0.5,
+                guardian: {
+                  name: 'Flame Sprite',
+                  lore: 'A spark of joy in the inferno. The Sprite dances among the flames, playful and quick. But do not mistake its laughter for weakness — it was born from an exploding star, and its touch can melt tungsten.',
+                  hp: 240,
+                  style: 'ram_retreat',
+                  coinBonus: 40,
+                  replayCoinBonus: 15,
+                },
+                creatureReward: CAPTAINS.flame_sprite,
+              },
+              {
+                tier: 'constellation',
+                name: 'The Scorched Chain',
+                lore: 'Five dying stars linked by streams of plasma. The chain is slowly pulling them together for a cataclysmic merger that will reshape this corner of the galaxy.',
+                travelDistance: 3000,
+                obstacleDensity: 0.65,
+                guardian: {
+                  name: 'Flame Drake',
+                  lore: 'The apex predator of the inferno. The Drake hunts through rivers of fire, its scales forged harder than any alloy. It has claimed the Scorched Chain as its hunting ground, and it does not share.',
+                  hp: 550,
+                  style: 'ram_retreat',
+                  coinBonus: 90,
+                  replayCoinBonus: 30,
+                },
+                creatureReward: CAPTAINS.flame_drake,
+              },
+              {
+                tier: 'galaxy',
+                name: 'The Molten Heart',
+                lore: 'The core of Inferno Depths — a churning sphere of plasma where gravity bends and reality warps. Ships that enter are either reforged or reduced to atoms.',
+                travelDistance: 5000,
+                obstacleDensity: 0.8,
+                guardian: {
+                  name: 'Flame Colossus',
+                  lore: 'The living embodiment of the Inferno itself. The Colossus is not a creature that lives in fire — it IS fire given form, will, and wrath. It has burned for millennia, and it will burn long after the last star dies.',
+                  hp: 1100,
+                  style: 'ram_retreat',
+                  coinBonus: 200,
+                  replayCoinBonus: 60,
+                },
+                creatureReward: CAPTAINS.flame_colossus,
+              },
+            ],
+          },
+
+          // ── LAND ── (Medium-Hard)
+          {
+            id: 'terra_expanse',
+            name: 'Terra Expanse',
+            theme: 'land',
+            description: 'Massive stone continents float through space, held together by ancient root networks that predate the galaxy. Life clings to every surface — mosses, fungi, crystalline trees — all thriving in the void.',
+            tiers: [
+              {
+                tier: 'star',
+                name: 'The Amber Hearth',
+                lore: 'A warm, amber star nestled among floating stone islands. Its light feeds the root networks, and the stone around it hums with slow, patient life.',
+                travelDistance: 1800,
+                obstacleDensity: 0.55,
+                guardian: {
+                  name: 'Rock Beetle',
+                  lore: 'The Beetle has burrowed through asteroids since before recorded history. Its shell is compressed stone harder than diamond, and its mandibles can crack a cruiser hull. It guards the Amber Hearth because the warmth reminds it of home — the deep places where magma meets stone.',
+                  hp: 280,
+                  style: 'ram_retreat',
+                  coinBonus: 45,
+                  replayCoinBonus: 18,
+                },
+                creatureReward: CAPTAINS.land_beetle,
+              },
+              {
+                tier: 'constellation',
+                name: 'The Root Bridge',
+                lore: 'Nine stars connected by a network of petrified roots so old they have become part of spacetime. Walk the roots, and you walk between worlds.',
+                travelDistance: 3200,
+                obstacleDensity: 0.7,
+                guardian: {
+                  name: 'Stone Wyrm',
+                  lore: 'The Wyrm tunnels through the roots themselves, carving new paths between stars. Its body is segmented stone held together by ancient moss that is itself alive and hungry. The Root Bridge is its territory, and every tremor you feel is the Wyrm moving beneath you.',
+                  hp: 620,
+                  style: 'tap_shoot',
+                  coinBonus: 100,
+                  replayCoinBonus: 35,
+                },
+                creatureReward: CAPTAINS.land_wyrm,
+              },
+              {
+                tier: 'galaxy',
+                name: 'The Living Monolith',
+                lore: 'At the center of Terra Expanse stands a stone structure the size of a planet — not built, but grown. It is alive, aware, and very, very old.',
+                travelDistance: 5500,
+                obstacleDensity: 0.85,
+                guardian: {
+                  name: 'Terra Colossus',
+                  lore: 'The Monolith\'s guardian — or perhaps the Monolith itself given legs. The Terra Colossus is mountain made flesh, forest made fist. Trees grow from its shoulders, rivers flow through its veins, and when it walks, new worlds form in its footprints.',
+                  hp: 1200,
+                  style: 'ram_retreat',
+                  coinBonus: 220,
+                  replayCoinBonus: 65,
+                },
+                creatureReward: CAPTAINS.land_colossus,
+              },
+            ],
+          },
+
+          // ── ELECTRIC ── (Hardest)
+          {
+            id: 'storm_nexus',
+            name: 'Storm Nexus',
+            theme: 'electric',
+            description: 'Perpetual lightning storms rage between charged nebulae. The space here crackles with raw power — sensors fail, shields fluctuate, and one wrong move sends a billion volts through your hull.',
+            tiers: [
+              {
+                tier: 'star',
+                name: 'The Spark Origin',
+                lore: 'The first bolt of lightning in this galaxy struck here and never stopped. The star pulses like a strobe, and its energy arcs to anything that draws near.',
+                travelDistance: 2000,
+                obstacleDensity: 0.6,
+                guardian: {
+                  name: 'Spark Mote',
+                  lore: 'A concentrated ball of living electricity, the Mote zips through the Storm Nexus faster than sensors can track. It is pure energy with a will — curious, erratic, and devastatingly powerful for its size. Touch it, and your ship\'s systems fry instantly.',
+                  hp: 300,
+                  style: 'auto_dodge',
+                  coinBonus: 50,
+                  replayCoinBonus: 20,
+                },
+                creatureReward: CAPTAINS.electric_mote,
+              },
+              {
+                tier: 'constellation',
+                name: 'The Arc Web',
+                lore: 'A constellation where lightning perpetually arcs between every star, forming a web of pure energy. The patterns shift constantly — what was safe a moment ago may be lethal now.',
+                travelDistance: 3800,
+                obstacleDensity: 0.75,
+                guardian: {
+                  name: 'Volt Serpent',
+                  lore: 'The Serpent swims through the Arc Web like an eel through water. Its body is a conduit for the web\'s power — it can channel the energy of entire stars through its coils. Those who face it describe the smell of ozone and the sound of a thousand thunderclaps.',
+                  hp: 700,
+                  style: 'auto_dodge',
+                  coinBonus: 120,
+                  replayCoinBonus: 40,
+                },
+                creatureReward: CAPTAINS.electric_serpent,
+              },
+              {
+                tier: 'galaxy',
+                name: 'The Eternal Storm',
+                lore: 'The center of the Storm Nexus — a tempest that has raged since the Big Bang. Here, lightning is not weather. It is the fundamental force of creation, raw and untamed.',
+                travelDistance: 6000,
+                obstacleDensity: 0.9,
+                guardian: {
+                  name: 'Storm Titan',
+                  lore: 'The Storm Titan does not live in the tempest — it IS the tempest. A being of pure electromagnetic force, vast as a nebula and quick as lightning. It has destroyed fleets with a thought and reshaped planets with a gesture. Only the most powerful captains in the galaxy dare face it.',
+                  hp: 1400,
+                  style: 'auto_dodge',
+                  coinBonus: 250,
+                  replayCoinBonus: 75,
+                },
+                creatureReward: CAPTAINS.electric_titan,
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+];
+
+// Legacy WORLDS export for existing scenes (Play/missions)
 export const WORLDS: WorldDef[] = [
   {
-    id: 'nebula_fields',
-    name: 'Nebula Fields',
-    theme: 'nebula',
+    id: 'nebula_fields', name: 'Nebula Fields', theme: 'nebula',
     levels: [
-      {
-        tier: 'star',
-        travelDistance: 1000,
-        obstacleDensity: 0.3,
-        boss: {
-          name: 'Nebula Drifter',
-          hp: 200,
-          style: 'auto_dodge',
-          coinBonus: 30,
-          replayCoinBonus: 10,
-        },
-        creatureReward: CAPTAINS.nebula_jelly,
-      },
-      {
-        tier: 'constellation',
-        travelDistance: 2000,
-        obstacleDensity: 0.5,
-        boss: {
-          name: 'Nebula Specter',
-          hp: 500,
-          style: 'auto_dodge',
-          coinBonus: 70,
-          replayCoinBonus: 20,
-        },
-        creatureReward: CAPTAINS.nebula_wisp,
-      },
-      {
-        tier: 'galaxy',
-        travelDistance: 3500,
-        obstacleDensity: 0.7,
-        boss: {
-          name: 'Nebula Overlord',
-          hp: 1000,
-          style: 'auto_dodge',
-          coinBonus: 150,
-          replayCoinBonus: 40,
-        },
-        creatureReward: CAPTAINS.nebula_titan,
-      },
+      { tier: 'star', travelDistance: 1000, obstacleDensity: 0.3,
+        boss: { name: 'Nebula Drifter', hp: 200, style: 'auto_dodge', coinBonus: 30, replayCoinBonus: 10 },
+        creatureReward: CAPTAINS.nebula_jelly },
+      { tier: 'constellation', travelDistance: 2000, obstacleDensity: 0.5,
+        boss: { name: 'Nebula Specter', hp: 500, style: 'auto_dodge', coinBonus: 70, replayCoinBonus: 20 },
+        creatureReward: CAPTAINS.nebula_wisp },
+      { tier: 'galaxy', travelDistance: 3500, obstacleDensity: 0.7,
+        boss: { name: 'Nebula Overlord', hp: 1000, style: 'auto_dodge', coinBonus: 150, replayCoinBonus: 40 },
+        creatureReward: CAPTAINS.nebula_titan },
     ],
   },
   {
-    id: 'ice_frontier',
-    name: 'Ice Frontier',
-    theme: 'ice',
+    id: 'ice_frontier', name: 'Ice Frontier', theme: 'ice',
     levels: [
-      {
-        tier: 'star',
-        travelDistance: 1200,
-        obstacleDensity: 0.4,
-        boss: {
-          name: 'Ice Sentinel',
-          hp: 220,
-          style: 'tap_shoot',
-          coinBonus: 35,
-          replayCoinBonus: 12,
-        },
-        creatureReward: CAPTAINS.ice_shard,
-      },
-      {
-        tier: 'constellation',
-        travelDistance: 2500,
-        obstacleDensity: 0.6,
-        boss: {
-          name: 'Frost Warden',
-          hp: 520,
-          style: 'tap_shoot',
-          coinBonus: 80,
-          replayCoinBonus: 25,
-        },
-        creatureReward: CAPTAINS.ice_prism,
-      },
-      {
-        tier: 'galaxy',
-        travelDistance: 4000,
-        obstacleDensity: 0.75,
-        boss: {
-          name: 'Glacial Tyrant',
-          hp: 1050,
-          style: 'tap_shoot',
-          coinBonus: 170,
-          replayCoinBonus: 45,
-        },
-        creatureReward: CAPTAINS.ice_golem,
-      },
+      { tier: 'star', travelDistance: 1200, obstacleDensity: 0.4,
+        boss: { name: 'Ice Sentinel', hp: 220, style: 'tap_shoot', coinBonus: 35, replayCoinBonus: 12 },
+        creatureReward: CAPTAINS.ice_shard },
+      { tier: 'constellation', travelDistance: 2500, obstacleDensity: 0.6,
+        boss: { name: 'Frost Warden', hp: 520, style: 'tap_shoot', coinBonus: 80, replayCoinBonus: 25 },
+        creatureReward: CAPTAINS.ice_prism },
+      { tier: 'galaxy', travelDistance: 4000, obstacleDensity: 0.75,
+        boss: { name: 'Glacial Tyrant', hp: 1050, style: 'tap_shoot', coinBonus: 170, replayCoinBonus: 45 },
+        creatureReward: CAPTAINS.ice_golem },
     ],
   },
   {
-    id: 'inferno_core',
-    name: 'Inferno Core',
-    theme: 'inferno',
+    id: 'inferno_core', name: 'Inferno Core', theme: 'inferno',
     levels: [
-      {
-        tier: 'star',
-        travelDistance: 1500,
-        obstacleDensity: 0.5,
-        boss: {
-          name: 'Ember Brute',
-          hp: 240,
-          style: 'ram_retreat',
-          coinBonus: 40,
-          replayCoinBonus: 15,
-        },
-        creatureReward: CAPTAINS.flame_sprite,
-      },
-      {
-        tier: 'constellation',
-        travelDistance: 3000,
-        obstacleDensity: 0.65,
-        boss: {
-          name: 'Inferno Ravager',
-          hp: 550,
-          style: 'ram_retreat',
-          coinBonus: 90,
-          replayCoinBonus: 30,
-        },
-        creatureReward: CAPTAINS.flame_drake,
-      },
-      {
-        tier: 'galaxy',
-        travelDistance: 5000,
-        obstacleDensity: 0.8,
-        boss: {
-          name: 'Core Annihilator',
-          hp: 1100,
-          style: 'ram_retreat',
-          coinBonus: 200,
-          replayCoinBonus: 60,
-        },
-        creatureReward: CAPTAINS.flame_colossus,
-      },
+      { tier: 'star', travelDistance: 1500, obstacleDensity: 0.5,
+        boss: { name: 'Ember Brute', hp: 240, style: 'ram_retreat', coinBonus: 40, replayCoinBonus: 15 },
+        creatureReward: CAPTAINS.flame_sprite },
+      { tier: 'constellation', travelDistance: 3000, obstacleDensity: 0.65,
+        boss: { name: 'Inferno Ravager', hp: 550, style: 'ram_retreat', coinBonus: 90, replayCoinBonus: 30 },
+        creatureReward: CAPTAINS.flame_drake },
+      { tier: 'galaxy', travelDistance: 5000, obstacleDensity: 0.8,
+        boss: { name: 'Core Annihilator', hp: 1100, style: 'ram_retreat', coinBonus: 200, replayCoinBonus: 60 },
+        creatureReward: CAPTAINS.flame_colossus },
     ],
   },
 ];

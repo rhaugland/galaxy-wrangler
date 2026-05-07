@@ -21,6 +21,12 @@ const THEMES: Record<string, { primary: number; accent: number; bg: number }> = 
   flame_sprite:   { primary: 0xff8844, accent: 0xffdd00, bg: 0x140800 },
   flame_drake:    { primary: 0xff5522, accent: 0xff8800, bg: 0x120500 },
   flame_colossus: { primary: 0xdd2200, accent: 0xffaa00, bg: 0x100400 },
+  land_beetle:    { primary: 0x88aa44, accent: 0xddaa44, bg: 0x0a0c04 },
+  land_wyrm:      { primary: 0x66884a, accent: 0xcc8833, bg: 0x080a03 },
+  land_colossus:  { primary: 0x448833, accent: 0x44dd66, bg: 0x060a02 },
+  electric_mote:  { primary: 0x44aaff, accent: 0xffee44, bg: 0x040810 },
+  electric_serpent: { primary: 0x6644ff, accent: 0xffdd00, bg: 0x060414 },
+  electric_titan: { primary: 0x8844ff, accent: 0x44eeff, bg: 0x080418 },
 };
 
 export class CaptainSelectScene extends Phaser.Scene {

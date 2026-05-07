@@ -108,9 +108,10 @@ export class MainMenuScene extends Phaser.Scene {
     // === NEON BUTTONS ===
     const btnW = 240;
     const btnH = 56;
-    new Button(this, cx, 460, 'PLAY', () => this.transitionTo('WorldSelect'), btnW, btnH);
-    new Button(this, cx, 530, 'COSMO CANTINA', () => this.transitionTo('Shop'), btnW, btnH);
-    new Button(this, cx, 600, 'FLEET', () => this.transitionTo('CaptainSelect'), btnW, btnH);
+    new Button(this, cx, 430, 'PLAY', () => this.transitionTo('WorldSelect'), btnW, btnH);
+    new Button(this, cx, 500, 'UNIVERSES', () => this.transitionTo('Universe'), btnW, btnH);
+    new Button(this, cx, 570, 'COSMO CANTINA', () => this.transitionTo('Shop'), btnW, btnH);
+    new Button(this, cx, 640, 'FLEET', () => this.transitionTo('CaptainSelect'), btnW, btnH);
 
     // Settings gear in top-right
     new Button(this, W - 36, 36, '\u2699', () => this.transitionTo('Settings'), 44, 44);
@@ -124,14 +125,14 @@ export class MainMenuScene extends Phaser.Scene {
     this.registry.set('saveManager', mgr);
 
     // Player info at bottom — retro styled
-    this.add.text(cx, H - 80, `\u2605 LEVEL ${save.level} \u2605`, {
+    this.add.text(cx, H - 60, `\u2605 LEVEL ${save.level} \u2605`, {
       fontSize: '16px',
       fontFamily: '"Courier New", monospace',
       fontStyle: 'bold',
       color: '#ff69b4',
     }).setOrigin(0.5);
 
-    this.add.text(cx, H - 52, `${save.coins} CREDITS`, {
+    this.add.text(cx, H - 38, `${save.coins} CREDITS`, {
       fontSize: '20px',
       fontFamily: '"Courier New", monospace',
       fontStyle: 'bold',
@@ -139,7 +140,7 @@ export class MainMenuScene extends Phaser.Scene {
     }).setOrigin(0.5);
 
     // Version tag
-    this.add.text(cx, H - 20, 'v1.0', {
+    this.add.text(cx, H - 16, 'v1.1', {
       fontSize: '10px',
       fontFamily: 'monospace',
       color: '#333366',

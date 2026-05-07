@@ -9,6 +9,9 @@ import { TravelScene } from './scenes/TravelScene';
 import { BossScene } from './scenes/BossScene';
 import { SpaceScene } from './scenes/SpaceScene';
 import { MissionScene } from './scenes/MissionScene';
+import { UniverseScene } from './scenes/UniverseScene';
+import { GalaxyViewScene } from './scenes/GalaxyViewScene';
+import { PlanetViewScene } from './scenes/PlanetViewScene';
 import { HUD } from './ui/hud';
 
 const config: Phaser.Types.Core.GameConfig = {
@@ -33,6 +36,9 @@ const config: Phaser.Types.Core.GameConfig = {
     BossScene,
     SpaceScene,
     MissionScene,
+    UniverseScene,
+    GalaxyViewScene,
+    PlanetViewScene,
     HUD,
   ],
 };

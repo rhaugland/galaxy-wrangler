@@ -25,6 +25,37 @@ export interface MissionTemplate {
   minLevel: number;
 }
 
+export interface UniverseDef {
+  id: string; name: string;
+  galaxies: GalaxyDef[];
+}
+
+export interface GalaxyDef {
+  id: string; name: string; description: string;
+  planets: PlanetDef[];
+}
+
+export interface PlanetDef {
+  id: string; name: string; theme: string;
+  description: string;
+  tiers: TierDef[];
+}
+
+export interface TierDef {
+  tier: 'star' | 'constellation' | 'galaxy';
+  name: string; lore: string;
+  travelDistance: number; obstacleDensity: number;
+  guardian: GuardianDef;
+  creatureReward: Captain;
+}
+
+export interface GuardianDef {
+  name: string; lore: string;
+  hp: number;
+  style: 'auto_dodge' | 'tap_shoot' | 'ram_retreat';
+  coinBonus: number; replayCoinBonus: number;
+}
+
 export interface WorldDef {
   id: string; name: string; theme: string;
   levels: LevelDef[];
